@@ -17,8 +17,32 @@ services:
     depends_on:
       ckan:
         condition: service_healthy
+      portaljs:
+        condition: service_healthy
     ports:
       - "0.0.0.0:${NGINX_SSLPORT_HOST}:${NGINX_SSLPORT}"
+
+  portaljs:
+    build:
+      context: portaljs/
+      dockerfile: Dockerfile
+    networks:
+      - webnet
+      - ckannet
+    depends_on:
+      ckan:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - CKAN_API_URL=http://ckan:5000
+      - NEXT_PUBLIC_CKAN_URL=${CKAN_SITE_URL}
+      - NEXT_PUBLIC_SITE_TITLE=${PORTALJS_SITE_TITLE:-Data Portal}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:3000"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
     
   ckan:
     build:

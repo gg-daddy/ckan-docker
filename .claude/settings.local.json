@@ -8,7 +8,10 @@
       "Bash(git -C /Users/chenyanbin/codebase/keyrus/ckan-docker show:*)",
       "Bash(git -C /Users/chenyanbin/codebase/keyrus/ckan-docker log portjs-inte --oneline)",
       "Bash(tree:*)",
-      "Bash(git -C /Users/chenyanbin/codebase/keyrus/ckan-docker diff master..portjs-inte --stat)"
+      "Bash(git -C /Users/chenyanbin/codebase/keyrus/ckan-docker diff master..portjs-inte --stat)",
+      "WebSearch",
+      "WebFetch(domain:www.portaljs.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

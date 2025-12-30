@@ -6,6 +6,7 @@ volumes:
   site_packages:
   local_bin:
   home_dir:
+  portaljs_node_modules:
 
 services:
 
@@ -78,3 +79,22 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-e", "QUIT"]
+
+  portaljs-dev:
+    build:
+      context: portaljs/
+      dockerfile: Dockerfile.dev
+    ports:
+      - "0.0.0.0:${PORTALJS_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=development
+      - CKAN_API_URL=http://ckan-dev:5000
+      - NEXT_PUBLIC_CKAN_URL=${CKAN_SITE_URL:-http://localhost:5000}
+      - NEXT_PUBLIC_SITE_TITLE=${PORTALJS_SITE_TITLE:-Data Portal (Dev)}
+    volumes:
+      - ./portaljs:/app
+      - portaljs_node_modules:/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      ckan-dev:
+        condition: service_healthy

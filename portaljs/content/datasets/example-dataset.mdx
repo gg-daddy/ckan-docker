@@ -1,0 +1,144 @@
+---
+datasetId: "example-dataset"
+title: "Example Dataset Documentation"
+description: "Rich documentation example for CKAN datasets using MDX"
+author: "Data Team"
+lastUpdated: "2024-12-26"
+features:
+  showChart: true
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+---
+
+# Overview
+
+This is an example MDX file demonstrating how to create rich documentation for CKAN datasets. The filename (`example-dataset.mdx`) should match the CKAN dataset ID/name to automatically associate this content with the dataset.
+
+## Key Features
+
+- **Markdown Support**: Full GitHub-flavored markdown with tables, code blocks, and more
+- **React Components**: Embed interactive components (charts, tables, visualizations)
+- **Frontmatter Metadata**: Configure display options and provide additional metadata
+- **Automatic Association**: Filename matches CKAN dataset ID for seamless integration
+
+## Data Description
+
+This dataset contains sample data for demonstration purposes. It includes:
+
+1. Historical records from 2020-2024
+2. Geographic coverage across multiple regions
+3. Various data formats (CSV, JSON, GeoJSON)
+
+### Data Quality
+
+| Attribute | Score | Notes |
+|-----------|-------|-------|
+| Completeness | 98% | Minor gaps in 2021 Q3 |
+| Accuracy | 95% | Verified against source |
+| Timeliness | Daily | Updated every 24 hours |
+
+## Usage Examples
+
+### Python
+
+```python
+import pandas as pd
+import requests
+
+# Fetch dataset metadata
+api_url = "https://your-portal.com/api/3/action/package_show"
+response = requests.get(api_url, params={"id": "example-dataset"})
+dataset = response.json()["result"]
+
+# Get the first CSV resource
+csv_resource = next(r for r in dataset["resources"] if r["format"] == "CSV")
+
+# Load into pandas
+df = pd.read_csv(csv_resource["url"])
+print(df.head())
+```
+
+### R
+
+```r
+library(jsonlite)
+library(readr)
+
+# Fetch dataset info
+api_url <- "https://your-portal.com/api/3/action/package_show?id=example-dataset"
+dataset <- fromJSON(api_url)$result
+
+# Get CSV resource URL
+csv_url <- dataset$resources[[1]]$url
+
+# Read the data
+data <- read_csv(csv_url)
+head(data)
+```
+
+### JavaScript
+
+```javascript
+// Fetch dataset metadata
+const response = await fetch(
+  'https://your-portal.com/api/3/action/package_show?id=example-dataset'
+);
+const { result: dataset } = await response.json();
+
+// Get resources
+console.log('Available resources:', dataset.resources.map(r => ({
+  name: r.name,
+  format: r.format,
+  url: r.url
+})));
+```
+
+## Methodology
+
+### Data Collection
+
+Data was collected using automated sensors deployed across multiple locations. The collection methodology follows industry best practices:
+
+1. **Sensor Calibration**: All sensors calibrated monthly
+2. **Quality Control**: Automated anomaly detection with manual review
+3. **Gap Filling**: Missing values interpolated using standard methods
+
+### Processing Pipeline
+
+> The data processing pipeline runs daily at 00:00 UTC, ensuring fresh data is available each morning.
+
+Steps in the processing pipeline:
+
+1. Raw data ingestion from sensors
+2. Quality control checks
+3. Standardization and normalization
+4. Aggregation at various temporal scales
+5. Publication to the data portal
+
+## License and Attribution
+
+This dataset is released under the **Creative Commons Attribution 4.0 International License** (CC BY 4.0).
+
+When using this dataset, please cite:
+
+```
+Data Portal Team (2024). Example Dataset. My Data Portal.
+https://your-portal.com/dataset/example-dataset
+```
+
+## Contact
+
+For questions about this dataset, please contact:
+
+- **Data Team**: data@example.com
+- **Technical Support**: support@example.com
+
+## Related Datasets
+
+- [Related Dataset 1](/dataset/related-dataset-1)
+- [Related Dataset 2](/dataset/related-dataset-2)
+
+---
+
+*Last updated: December 2024*

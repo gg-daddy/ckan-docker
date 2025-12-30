@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Helper script for PortalJS development container
+#
+# Usage:
+#   bin/portaljs [command]
+#
+# Examples:
+#   bin/portaljs npm install <package>
+#   bin/portaljs npm run lint
+#   bin/portaljs sh  (open shell)
+#
+
+set -e
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if [ $# -eq 0 ]; then
+    echo "Usage: bin/portaljs [command]"
+    echo ""
+    echo "Examples:"
+    echo "  bin/portaljs npm install <package>"
+    echo "  bin/portaljs npm run lint"
+    echo "  bin/portaljs sh  (open shell)"
+    exit 1
+fi
+
+docker compose -f "${ROOT}/docker-compose.dev.yml" exec portaljs-dev "$@"

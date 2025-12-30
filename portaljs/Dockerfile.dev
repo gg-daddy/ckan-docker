@@ -1,0 +1,24 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies for native modules
+RUN apk add --no-cache libc6-compat
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies including devDependencies
+RUN npm install
+
+# Copy source code (will be overwritten by volume mount in dev mode)
+COPY . .
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Development server with hot-reload
+CMD ["npm", "run", "dev"]
