@@ -89,3 +89,34 @@ export function deserializeSession(cookieValue: string): SessionData | null {
 export function isSessionExpired(session: SessionData): boolean {
   return Date.now() > session.expiresAt;
 }
+
+/**
+ * Get session from Next.js API request cookies
+ */
+export function getSessionFromRequest(
+  cookies: Partial<{ [key: string]: string }>
+): SessionData | null {
+  const cookieValue = cookies[AUTH_COOKIE_NAME];
+
+  if (!cookieValue) {
+    return null;
+  }
+
+  const session = deserializeSession(cookieValue);
+
+  if (!session || isSessionExpired(session)) {
+    return null;
+  }
+
+  return session;
+}
+
+/**
+ * Get user's API token from request cookies
+ */
+export function getApiTokenFromRequest(
+  cookies: Partial<{ [key: string]: string }>
+): string | null {
+  const session = getSessionFromRequest(cookies);
+  return session?.apiToken || null;
+}
