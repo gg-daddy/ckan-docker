@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import Layout from '@/components/Layout';
 import ResourceList from '@/components/ResourceList';
 import ResourceBadge from '@/components/ResourceBadge';
+import ColabButton from '@/components/ColabButton';
 import { getDataset, CkanDataset } from '@/lib/ckan';
 import { getMDXForDataset, MDXFrontmatter } from '@/lib/mdx';
 
@@ -276,6 +277,12 @@ export default function DatasetPage({
                     </svg>
                     View API
                   </a>
+                  {frontmatter?.colabNotebook && (
+                    <ColabButton
+                      notebookPath={frontmatter.colabNotebook}
+                      className="btn-secondary w-full"
+                    />
+                  )}
                 </div>
               </div>
 

@@ -18,6 +18,7 @@ export interface MDXFrontmatter {
     showDownloadButton?: boolean;
     showResources?: boolean;
   };
+  colabNotebook?: string; // Path to notebook file, e.g., "example-dataset.ipynb"
   [key: string]: unknown;
 }
 
