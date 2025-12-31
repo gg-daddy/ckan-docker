@@ -65,12 +65,12 @@ export default function DatasetPage({
       description={dataset.notes?.substring(0, 160)}
     >
       {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b border-gray-200">
+      <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="container-main py-4">
           <nav className="flex" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm">
               <li>
-                <Link href="/" className="text-gray-500 hover:text-gray-700">
+                <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
                   Home
                 </Link>
               </li>
@@ -90,7 +90,7 @@ export default function DatasetPage({
                 </svg>
                 <Link
                   href="/search"
-                  className="ml-2 text-gray-500 hover:text-gray-700"
+                  className="ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                 >
                   Datasets
                 </Link>
@@ -109,7 +109,7 @@ export default function DatasetPage({
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
-                <span className="ml-2 text-gray-900 font-medium truncate max-w-xs">
+                <span className="ml-2 text-gray-900 dark:text-white font-medium truncate max-w-xs">
                   {dataset.title}
                 </span>
               </li>
@@ -124,12 +124,12 @@ export default function DatasetPage({
           <div>
             {/* Header */}
             <header className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 {dataset.title}
               </h1>
 
               {/* Meta */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                 {dataset.organization && (
                   <div className="flex items-center">
                     <svg
@@ -193,7 +193,7 @@ export default function DatasetPage({
                     <Link
                       key={tag.id}
                       href={`/search?q=${encodeURIComponent(tag.name)}`}
-                      className="badge-gray hover:bg-gray-200"
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                     >
                       {tag.display_name}
                     </Link>
@@ -242,7 +242,7 @@ export default function DatasetPage({
                     href={`/api/3/action/package_show?id=${dataset.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <svg
                       className="h-4 w-4"
@@ -263,7 +263,7 @@ export default function DatasetPage({
                     onClick={() => {
                       navigator.clipboard.writeText(window.location.href);
                     }}
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white p-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     title="Copy link"
                   >
                     <svg
@@ -293,9 +293,9 @@ export default function DatasetPage({
               ) : (
                 <div>
                   {dataset.notes ? (
-                    <p className="text-gray-700 whitespace-pre-wrap">{dataset.notes}</p>
+                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{dataset.notes}</p>
                   ) : (
-                    <p className="text-gray-500 italic">
+                    <p className="text-gray-500 dark:text-gray-400 italic">
                       No description available for this dataset.
                     </p>
                   )}
@@ -317,54 +317,54 @@ export default function DatasetPage({
             </div>
 
             {/* About this dataset - Similar to data.gov.sg */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                 About this dataset
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
                 {dataset.author && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Author</dt>
-                    <dd className="text-gray-900">{dataset.author}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Author</dt>
+                    <dd className="text-gray-900 dark:text-white">{dataset.author}</dd>
                   </div>
                 )}
                 {dataset.maintainer && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Maintainer</dt>
-                    <dd className="text-gray-900">{dataset.maintainer}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Maintainer</dt>
+                    <dd className="text-gray-900 dark:text-white">{dataset.maintainer}</dd>
                   </div>
                 )}
                 {dataset.license_title && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Licence</dt>
-                    <dd className="text-gray-900">{dataset.license_title}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Licence</dt>
+                    <dd className="text-gray-900 dark:text-white">{dataset.license_title}</dd>
                   </div>
                 )}
                 {dataset.organization && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Organization</dt>
-                    <dd className="text-gray-900">{dataset.organization.title}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Organization</dt>
+                    <dd className="text-gray-900 dark:text-white">{dataset.organization.title}</dd>
                   </div>
                 )}
                 {dataset.metadata_created && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Created</dt>
-                    <dd className="text-gray-900">
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Created</dt>
+                    <dd className="text-gray-900 dark:text-white">
                       {new Date(dataset.metadata_created).toLocaleDateString()}
                     </dd>
                   </div>
                 )}
                 {dataset.metadata_modified && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Last Updated</dt>
-                    <dd className="text-gray-900">
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Last Updated</dt>
+                    <dd className="text-gray-900 dark:text-white">
                       {new Date(dataset.metadata_modified).toLocaleDateString()}
                     </dd>
                   </div>
                 )}
                 {dataset.resources && dataset.resources.length > 0 && (
                   <div>
-                    <dt className="text-gray-500 mb-1">Formats</dt>
+                    <dt className="text-gray-500 dark:text-gray-400 mb-1">Formats</dt>
                     <dd className="flex flex-wrap gap-1">
                       {[
                         ...new Set(
@@ -379,8 +379,8 @@ export default function DatasetPage({
                   </div>
                 )}
                 <div>
-                  <dt className="text-gray-500 mb-1">Dataset ID</dt>
-                  <dd className="text-gray-900 font-mono text-xs break-all">
+                  <dt className="text-gray-500 dark:text-gray-400 mb-1">Dataset ID</dt>
+                  <dd className="text-gray-900 dark:text-white font-mono text-xs break-all">
                     {dataset.id}
                   </dd>
                 </div>

@@ -470,3 +470,29 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Header responsive fix - ensure navigation is visible on desktop */
+@media (min-width: 768px) {
+  header nav.hidden.md\:flex {
+    display: flex !important;
+  }
+
+  header form.hidden.md\:flex {
+    display: flex !important;
+  }
+
+  header .md\:hidden {
+    display: none !important;
+  }
+}
+
+/* Search page filter toolbar responsive fix */
+@media (min-width: 1024px) {
+  .hidden.lg\:flex {
+    display: flex !important;
+  }
+
+  .lg\:hidden {
+    display: none !important;
+  }
+}

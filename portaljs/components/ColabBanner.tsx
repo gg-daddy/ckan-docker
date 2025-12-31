@@ -11,7 +11,7 @@ export default function ColabBanner({ notebookPath, datasetName }: ColabBannerPr
   const colabUrl = `https://colab.research.google.com/github/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/portaljs/content/notebooks/${notebookPath}`;
 
   return (
-    <div className="my-6 rounded-lg border border-gray-200 bg-white p-6">
+    <div className="my-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
       <div className="flex items-start gap-5">
         {/* Colab Logo - Official style matching data.gov.sg */}
         <div className="flex-shrink-0">
@@ -41,14 +41,14 @@ export default function ColabBanner({ notebookPath, datasetName }: ColabBannerPr
 
         {/* Content */}
         <div className="flex-grow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
             Analyse this dataset with Colab Notebook
           </h3>
-          <ol className="text-sm text-gray-600 space-y-1 mb-4">
+          <ol className="text-sm text-gray-600 dark:text-gray-300 space-y-1 mb-4">
             {datasetName && (
               <li>
                 1. Dataset ID:{' '}
-                <code className="bg-gray-100 px-1.5 py-0.5 rounded text-blue-600 font-mono text-xs">
+                <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-blue-600 dark:text-blue-400 font-mono text-xs">
                   {datasetName}
                 </code>
               </li>
