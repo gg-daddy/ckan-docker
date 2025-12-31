@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Layout from '@/components/Layout';
 import ResourceList from '@/components/ResourceList';
 import ResourceBadge from '@/components/ResourceBadge';
@@ -36,11 +38,38 @@ const mdxComponents = {
     if (isInline) {
       return <code className="bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm" {...props} />;
     }
+    // For code blocks, just return the code element - pre will handle highlighting
     return <code {...props} />;
   },
-  pre: (props: any) => (
-    <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto mb-4" {...props} />
-  ),
+  pre: (props: any) => {
+    // Extract the code element from children
+    const codeElement = props.children;
+    if (codeElement?.type === 'code' || codeElement?.props?.className) {
+      const className = codeElement.props?.className || '';
+      const match = /language-(\w+)/.exec(className);
+      const language = match ? match[1] : 'text';
+      const code = String(codeElement.props?.children || '').replace(/\n$/, '');
+
+      return (
+        <SyntaxHighlighter
+          style={oneDark}
+          language={language}
+          PreTag="div"
+          className="rounded-lg mb-4"
+          showLineNumbers={false}
+          customStyle={{
+            margin: 0,
+            padding: '1rem',
+            fontSize: '0.875rem',
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
+      );
+    }
+    // Fallback for non-code pre elements
+    return <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto mb-4" {...props} />;
+  },
   table: (props: any) => (
     <div className="overflow-x-auto mb-4">
       <table className="min-w-full divide-y divide-gray-300" {...props} />
