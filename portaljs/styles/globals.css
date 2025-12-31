@@ -496,3 +496,16 @@ body {
     display: none !important;
   }
 }
+
+/* Fix for Tailwind JIT not generating primary button styles */
+.bg-primary-600 {
+  background-color: rgb(37, 99, 235) !important;
+}
+
+.hover\:bg-primary-700:hover {
+  background-color: rgb(29, 78, 216) !important;
+}
+
+.disabled\:bg-primary-400:disabled {
+  background-color: rgb(96, 165, 250) !important;
+}
