@@ -7,6 +7,7 @@ import Layout from '@/components/Layout';
 import ResourceList from '@/components/ResourceList';
 import ResourceBadge from '@/components/ResourceBadge';
 import ColabButton from '@/components/ColabButton';
+import ColabBanner from '@/components/ColabBanner';
 import { getDataset, CkanDataset } from '@/lib/ckan';
 import { getMDXForDataset, MDXFrontmatter } from '@/lib/mdx';
 
@@ -219,6 +220,14 @@ export default function DatasetPage({
                 </div>
               )}
             </div>
+
+            {/* Colab Banner - after content, before resources */}
+            {frontmatter?.colabNotebook && (
+              <ColabBanner
+                notebookPath={frontmatter.colabNotebook}
+                datasetName={dataset.name}
+              />
+            )}
 
             {/* Resources Section */}
             <div className="mt-12">
