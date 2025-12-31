@@ -119,9 +119,9 @@ export default function DatasetPage({
       </div>
 
       <div className="container-main py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
+        <div className="max-w-4xl">
+          {/* Main Content - Single Column Layout */}
+          <div>
             {/* Header */}
             <header className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -200,6 +200,88 @@ export default function DatasetPage({
                   ))}
                 </div>
               )}
+
+              {/* Prominent Download Button */}
+              {dataset.resources && dataset.resources.length > 0 && (
+                <div className="flex flex-wrap items-center gap-3 mt-6">
+                  {(() => {
+                    const primaryResource = dataset.resources[0];
+                    const format = primaryResource.format?.toUpperCase() || 'FILE';
+                    const size = primaryResource.size
+                      ? primaryResource.size < 1024
+                        ? `${primaryResource.size} B`
+                        : primaryResource.size < 1024 * 1024
+                        ? `${(primaryResource.size / 1024).toFixed(1)} KB`
+                        : `${(primaryResource.size / (1024 * 1024)).toFixed(1)} MB`
+                      : null;
+                    return (
+                      <a
+                        href={primaryResource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-violet-700 transition-colors"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                          />
+                        </svg>
+                        Download {format}{size ? ` (${size})` : ''}
+                      </a>
+                    );
+                  })()}
+                  <a
+                    href={`/api/3/action/package_show?id=${dataset.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                      />
+                    </svg>
+                    API
+                  </a>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                    }}
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white p-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
+                    title="Copy link"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
             </header>
 
             {/* MDX Content or Default Description */}
@@ -233,128 +315,78 @@ export default function DatasetPage({
             <div className="mt-12">
               <ResourceList resources={dataset.resources} />
             </div>
-          </div>
 
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="sticky top-8 space-y-6">
-              {/* Actions Card */}
-              <div className="card p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Actions
-                </h3>
-                <div className="space-y-3">
-                  <a
-                    href={`/dataset/edit/${dataset.name}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary w-full"
-                  >
-                    <svg
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
-                    Edit in CKAN
-                  </a>
-                  <a
-                    href={`/api/3/action/package_show?id=${dataset.name}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary w-full"
-                  >
-                    <svg
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                      />
-                    </svg>
-                    View API
-                  </a>
-                  {frontmatter?.colabNotebook && (
-                    <ColabButton
-                      notebookPath={frontmatter.colabNotebook}
-                      className="btn-secondary w-full"
-                    />
-                  )}
-                </div>
-              </div>
-
-              {/* Formats Card */}
-              {dataset.resources && dataset.resources.length > 0 && (
-                <div className="card p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Available Formats
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      ...new Set(
-                        dataset.resources
-                          .map((r) => r.format?.toUpperCase())
-                          .filter(Boolean)
-                      ),
-                    ].map((format) => (
-                      <ResourceBadge key={format} format={format as string} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Info Card */}
-              <div className="card p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Dataset Info
-                </h3>
-                <dl className="space-y-3 text-sm">
+            {/* About this dataset - Similar to data.gov.sg */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                About this dataset
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+                {dataset.author && (
                   <div>
-                    <dt className="text-gray-500">ID</dt>
-                    <dd className="text-gray-900 font-mono text-xs break-all">
-                      {dataset.id}
+                    <dt className="text-gray-500 mb-1">Author</dt>
+                    <dd className="text-gray-900">{dataset.author}</dd>
+                  </div>
+                )}
+                {dataset.maintainer && (
+                  <div>
+                    <dt className="text-gray-500 mb-1">Maintainer</dt>
+                    <dd className="text-gray-900">{dataset.maintainer}</dd>
+                  </div>
+                )}
+                {dataset.license_title && (
+                  <div>
+                    <dt className="text-gray-500 mb-1">Licence</dt>
+                    <dd className="text-gray-900">{dataset.license_title}</dd>
+                  </div>
+                )}
+                {dataset.organization && (
+                  <div>
+                    <dt className="text-gray-500 mb-1">Organization</dt>
+                    <dd className="text-gray-900">{dataset.organization.title}</dd>
+                  </div>
+                )}
+                {dataset.metadata_created && (
+                  <div>
+                    <dt className="text-gray-500 mb-1">Created</dt>
+                    <dd className="text-gray-900">
+                      {new Date(dataset.metadata_created).toLocaleDateString()}
                     </dd>
                   </div>
+                )}
+                {dataset.metadata_modified && (
                   <div>
-                    <dt className="text-gray-500">Name</dt>
-                    <dd className="text-gray-900">{dataset.name}</dd>
+                    <dt className="text-gray-500 mb-1">Last Updated</dt>
+                    <dd className="text-gray-900">
+                      {new Date(dataset.metadata_modified).toLocaleDateString()}
+                    </dd>
                   </div>
-                  {dataset.metadata_created && (
-                    <div>
-                      <dt className="text-gray-500">Created</dt>
-                      <dd className="text-gray-900">
-                        {new Date(dataset.metadata_created).toLocaleDateString()}
-                      </dd>
-                    </div>
-                  )}
-                  {dataset.author && (
-                    <div>
-                      <dt className="text-gray-500">Author</dt>
-                      <dd className="text-gray-900">{dataset.author}</dd>
-                    </div>
-                  )}
-                  {dataset.maintainer && (
-                    <div>
-                      <dt className="text-gray-500">Maintainer</dt>
-                      <dd className="text-gray-900">{dataset.maintainer}</dd>
-                    </div>
-                  )}
-                </dl>
+                )}
+                {dataset.resources && dataset.resources.length > 0 && (
+                  <div>
+                    <dt className="text-gray-500 mb-1">Formats</dt>
+                    <dd className="flex flex-wrap gap-1">
+                      {[
+                        ...new Set(
+                          dataset.resources
+                            .map((r) => r.format?.toUpperCase())
+                            .filter(Boolean)
+                        ),
+                      ].map((format) => (
+                        <ResourceBadge key={format} format={format as string} size="sm" />
+                      ))}
+                    </dd>
+                  </div>
+                )}
+                <div>
+                  <dt className="text-gray-500 mb-1">Dataset ID</dt>
+                  <dd className="text-gray-900 font-mono text-xs break-all">
+                    {dataset.id}
+                  </dd>
+                </div>
               </div>
             </div>
-          </aside>
+          </div>
         </div>
       </div>
     </Layout>
