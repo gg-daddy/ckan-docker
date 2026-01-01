@@ -1,0 +1,95 @@
+---
+datasetId: "cnn-dailymail-summarization"
+title: "CNN/DailyMail - News Summarization Dataset"
+description: "The CNN/DailyMail dataset is a large-scale English news summarization dataset containing over 300,000 unique news articles from CNN and the Daily Mail."
+author: "Abigail See"
+lastUpdated: "2026-01-01"
+features:
+  showChart: false
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "abisee/cnn_dailymail"
+colabNotebook: "cnn-dailymail-summarization.ipynb"
+---
+
+# Overview
+
+The CNN/DailyMail dataset is a large-scale English news summarization dataset containing over 300,000 unique news articles from CNN and the Daily Mail.
+
+Each article comes with multi-sentence summaries (highlights) making it ideal for abstractive and extractive summarization research. This is one of the most widely used datasets for text summarization benchmarks.
+
+**Key Features:**
+- 300K+ news articles with summaries
+- Multi-sentence highlights as targets
+- Supports both extractive and abstractive summarization
+- Real-world news content
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Summarization |
+| **Modality** | Text |
+| **Language** | English |
+| **Size** | 300K articles |
+| **Downloads** | 84K+ monthly |
+| **Format** | parquet |
+| **License** | APACHE |
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("abisee/cnn_dailymail")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("abisee/cnn_dailymail")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Data Structure
+
+The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/abisee/cnn_dailymail) for detailed schema information.
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Automatic summarization systems
+- News digest generation
+- Document compression
+- Abstractive vs extractive comparison
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/abisee/cnn_dailymail) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/abisee/cnn_dailymail)
+- [Dataset Viewer](https://huggingface.co/datasets/abisee/cnn_dailymail/viewer)
+- [Download Options](https://huggingface.co/datasets/abisee/cnn_dailymail/tree/main)
+
+---
+
+*This dataset documentation is automatically generated from Hugging Face Hub metadata.*

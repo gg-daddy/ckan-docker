@@ -1,0 +1,95 @@
+---
+datasetId: "glue-benchmark"
+title: "GLUE - General Language Understanding Evaluation"
+description: "GLUE (General Language Understanding Evaluation) is a multi-task benchmark and analysis platform for evaluating natural language understanding systems."
+author: "NYU Machine Learning Lab"
+lastUpdated: "2026-01-01"
+features:
+  showChart: false
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "nyu-mll/glue"
+colabNotebook: "glue-benchmark.ipynb"
+---
+
+# Overview
+
+GLUE (General Language Understanding Evaluation) is a multi-task benchmark and analysis platform for evaluating natural language understanding systems.
+
+It includes diverse NLU tasks: sentiment analysis (SST-2), paraphrase detection (MRPC, QQP), natural language inference (MNLI, RTE, QNLI, WNLI), and linguistic acceptability (CoLA). GLUE is the standard benchmark for evaluating language models.
+
+**Key Features:**
+- 9 sentence-level tasks
+- Diverse NLU challenges
+- Standard benchmark for transformers
+- Public leaderboard
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Text Classification |
+| **Modality** | Text |
+| **Language** | English |
+| **Size** | Multiple tasks |
+| **Downloads** | 384K+ monthly |
+| **Format** | parquet |
+| **License** | OTHER-OPEN |
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("nyu-mll/glue")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("nyu-mll/glue")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Data Structure
+
+The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/nyu-mll/glue) for detailed schema information.
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Sentiment analysis model training
+- Text categorization benchmarking
+- Transfer learning experiments
+- Model fine-tuning and evaluation
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/nyu-mll/glue) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/nyu-mll/glue)
+- [Dataset Viewer](https://huggingface.co/datasets/nyu-mll/glue/viewer)
+- [Download Options](https://huggingface.co/datasets/nyu-mll/glue/tree/main)
+
+---
+
+*This dataset documentation is automatically generated from Hugging Face Hub metadata.*

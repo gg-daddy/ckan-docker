@@ -1,0 +1,95 @@
+---
+datasetId: "wikitext-language-modeling"
+title: "WikiText - Language Modeling Dataset"
+description: "WikiText is a collection of over 100 million tokens extracted from verified Good and Featured articles on Wikipedia, designed for language modeling research."
+author: "Salesforce Research"
+lastUpdated: "2026-01-01"
+features:
+  showChart: false
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "Salesforce/wikitext"
+colabNotebook: "wikitext-language-modeling.ipynb"
+---
+
+# Overview
+
+WikiText is a collection of over 100 million tokens extracted from verified Good and Featured articles on Wikipedia, designed for language modeling research.
+
+The dataset comes in multiple versions: WikiText-2 (2M tokens) and WikiText-103 (103M tokens). It features long-term dependencies and rich vocabulary, making it ideal for testing language models.
+
+**Key Features:**
+- 100M+ tokens from Wikipedia
+- High-quality curated content
+- Long-term dependencies
+- Large vocabulary
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Language Modeling |
+| **Modality** | Text |
+| **Language** | English |
+| **Size** | 100M+ tokens |
+| **Downloads** | 846K+ monthly |
+| **Format** | parquet |
+| **License** | CC-BY-SA |
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("Salesforce/wikitext")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("Salesforce/wikitext")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Data Structure
+
+The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/Salesforce/wikitext) for detailed schema information.
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Language model pre-training
+- Perplexity benchmarking
+- Text generation evaluation
+- Vocabulary and embedding analysis
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/Salesforce/wikitext) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/Salesforce/wikitext)
+- [Dataset Viewer](https://huggingface.co/datasets/Salesforce/wikitext/viewer)
+- [Download Options](https://huggingface.co/datasets/Salesforce/wikitext/tree/main)
+
+---
+
+*This dataset documentation is automatically generated from Hugging Face Hub metadata.*

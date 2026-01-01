@@ -1,0 +1,95 @@
+---
+datasetId: "gsm8k-math-reasoning"
+title: "GSM8K - Grade School Math Reasoning"
+description: "GSM8K is a dataset of 8,500 high-quality linguistically diverse grade school math word problems created by OpenAI."
+author: "OpenAI"
+lastUpdated: "2026-01-01"
+features:
+  showChart: false
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "openai/gsm8k"
+colabNotebook: "gsm8k-math-reasoning.ipynb"
+---
+
+# Overview
+
+GSM8K is a dataset of 8,500 high-quality linguistically diverse grade school math word problems created by OpenAI.
+
+Each problem requires 2-8 steps to solve and solutions primarily involve performing a sequence of elementary calculations using basic arithmetic operations. This dataset is crucial for evaluating mathematical reasoning in language models.
+
+**Key Features:**
+- 8,500 math word problems
+- Grade school level difficulty
+- Multi-step reasoning required
+- Natural language solutions
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Math Reasoning |
+| **Modality** | Text |
+| **Language** | English |
+| **Size** | 8.5K problems |
+| **Downloads** | 39K+ monthly |
+| **Format** | parquet |
+| **License** | MIT |
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("openai/gsm8k")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("openai/gsm8k")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Data Structure
+
+The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/openai/gsm8k) for detailed schema information.
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Mathematical reasoning evaluation
+- Chain-of-thought prompting research
+- LLM capability assessment
+- Educational AI development
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/openai/gsm8k) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/openai/gsm8k)
+- [Dataset Viewer](https://huggingface.co/datasets/openai/gsm8k/viewer)
+- [Download Options](https://huggingface.co/datasets/openai/gsm8k/tree/main)
+
+---
+
+*This dataset documentation is automatically generated from Hugging Face Hub metadata.*

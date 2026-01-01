@@ -1,0 +1,95 @@
+---
+datasetId: "squad-question-answering"
+title: "SQuAD - Stanford Question Answering Dataset"
+description: "Stanford Question Answering Dataset (SQuAD) is a reading comprehension dataset consisting of questions posed by crowdworkers on a set of Wikipedia articles."
+author: "Stanford NLP Group"
+lastUpdated: "2026-01-01"
+features:
+  showChart: false
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "rajpurkar/squad"
+colabNotebook: "squad-question-answering.ipynb"
+---
+
+# Overview
+
+Stanford Question Answering Dataset (SQuAD) is a reading comprehension dataset consisting of questions posed by crowdworkers on a set of Wikipedia articles.
+
+The answer to every question is a segment of text (a span) from the corresponding reading passage, or the question might be unanswerable. SQuAD 1.1 contains 100,000+ question-answer pairs on 500+ articles.
+
+**Key Features:**
+- Extractive question answering
+- 100,000+ question-answer pairs
+- Based on Wikipedia articles
+- Human-annotated answers
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Question Answering |
+| **Modality** | Text |
+| **Language** | English |
+| **Size** | 87K training examples |
+| **Downloads** | 108K+ monthly |
+| **Format** | parquet |
+| **License** | CC-BY-SA |
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("rajpurkar/squad")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("rajpurkar/squad")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Data Structure
+
+The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/rajpurkar/squad) for detailed schema information.
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Reading comprehension systems
+- Information retrieval evaluation
+- Chatbot development
+- Knowledge extraction research
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/rajpurkar/squad) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/rajpurkar/squad)
+- [Dataset Viewer](https://huggingface.co/datasets/rajpurkar/squad/viewer)
+- [Download Options](https://huggingface.co/datasets/rajpurkar/squad/tree/main)
+
+---
+
+*This dataset documentation is automatically generated from Hugging Face Hub metadata.*
