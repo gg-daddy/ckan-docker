@@ -115,22 +115,37 @@ export default async function handler(
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const body: RequestAccessBody = req.body;
-
-  // Validate required fields
-  if (!body.resourceId || !body.requesterName || !body.requesterEmail || !body.reason) {
-    return res.status(400).json({
+  // Require authentication - users must be logged in to request access
+  const session = getSessionFromRequest(req.cookies);
+  if (!session || !session.user) {
+    return res.status(401).json({
       success: false,
-      error: 'Missing required fields: resourceId, requesterName, requesterEmail, and reason are required',
+      error: 'Authentication required. Please log in to request access.',
     });
   }
 
-  // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(body.requesterEmail)) {
+  const apiToken = session.apiToken;
+  const body: RequestAccessBody = req.body;
+
+  // Validate required fields
+  if (!body.resourceId || !body.reason) {
     return res.status(400).json({
       success: false,
-      error: 'Invalid email address',
+      error: 'Missing required fields: resourceId and reason are required',
+    });
+  }
+
+  // Use authenticated user's info (ignore any client-provided name/email)
+  body.requesterName = session.user.displayName || session.user.name || body.username || 'Unknown';
+  body.requesterEmail = session.user.email || '';
+  body.username = session.user.name;
+
+  // Validate that we have a valid email from the session
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!body.requesterEmail || !emailRegex.test(body.requesterEmail)) {
+    return res.status(400).json({
+      success: false,
+      error: 'Your account does not have a valid email address. Please update your profile.',
     });
   }
 
@@ -140,10 +155,6 @@ export default async function handler(
       `No maintainer email set for dataset ${body.datasetId}. Request logged but cannot be sent.`
     );
   }
-
-  // Get session for API token if user is authenticated
-  const session = getSessionFromRequest(req.cookies);
-  const apiToken = session?.apiToken;
 
   // Send notification
   const result = await sendAccessRequestNotification(body, apiToken);
