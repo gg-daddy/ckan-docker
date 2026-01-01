@@ -16,6 +16,9 @@ const getCkanApiUrl = (): string => {
   return publicRuntimeConfig?.ckanUrl || process.env.NEXT_PUBLIC_CKAN_URL || 'https://localhost:8443';
 };
 
+// Access Level types for resource access control
+export type AccessLevel = 'public' | 'registered' | 'same_organization' | 'only_allowed_users';
+
 // CKAN API Types
 export interface CkanResource {
   id: string;
@@ -27,6 +30,9 @@ export interface CkanResource {
   created?: string;
   last_modified?: string;
   mimetype?: string;
+  // Access control fields (from ckanext-scheming)
+  access_level?: AccessLevel;
+  allowed_users?: string;
 }
 
 export interface CkanOrganization {

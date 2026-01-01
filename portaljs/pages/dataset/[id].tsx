@@ -342,7 +342,7 @@ export default function DatasetPage({
 
             {/* Resources Section */}
             <div className="mt-12">
-              <ResourceList resources={dataset.resources} />
+              <ResourceList resources={dataset.resources} dataset={dataset} />
             </div>
 
             {/* About this dataset - Similar to data.gov.sg */}

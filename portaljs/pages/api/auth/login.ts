@@ -6,6 +6,7 @@ import {
   AUTH_COOKIE_MAX_AGE,
   serializeSession,
   CkanUser,
+  UserOrganization,
 } from '@/lib/auth';
 
 // CKAN API URL (internal Docker network)
@@ -139,6 +140,46 @@ async function authenticateWithCkan(
   }
 }
 
+/**
+ * Fetch user's organization memberships from CKAN
+ */
+async function fetchUserOrganizations(
+  username: string,
+  apiToken: string
+): Promise<UserOrganization[]> {
+  try {
+    const response = await fetch(
+      `${CKAN_API_URL}/api/3/action/organization_list_for_user?id=${encodeURIComponent(username)}`,
+      {
+        headers: {
+          Authorization: apiToken,
+        },
+      }
+    );
+
+    const data: CkanApiResponse<Array<{
+      id: string;
+      name: string;
+      title: string;
+      capacity: string;
+    }>> = await response.json();
+
+    if (data.success && data.result) {
+      return data.result.map((org) => ({
+        id: org.id,
+        name: org.name,
+        title: org.title,
+        capacity: org.capacity,
+      }));
+    }
+
+    return [];
+  } catch (error) {
+    console.error('Error fetching user organizations:', error);
+    return [];
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<LoginResponse>
@@ -171,6 +212,9 @@ export default async function handler(
 
     const { user, apiToken } = authResult;
 
+    // Fetch user's organization memberships
+    const organizations = await fetchUserOrganizations(user.name, apiToken);
+
     // Create session data
     const sessionData: SessionData = {
       user: {
@@ -179,6 +223,7 @@ export default async function handler(
         displayName: user.display_name || user.fullname || user.name,
         email: user.email,
         sysadmin: user.sysadmin,
+        organizations,
       },
       apiToken,
       expiresAt: Date.now() + AUTH_COOKIE_MAX_AGE * 1000,

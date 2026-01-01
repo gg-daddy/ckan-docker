@@ -12,7 +12,10 @@
       "WebSearch",
       "WebFetch(domain:www.portaljs.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(docker compose:*)"
     ]
   }
 }

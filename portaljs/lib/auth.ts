@@ -18,6 +18,14 @@ export interface CkanUser {
   number_created_packages: number;
 }
 
+// User organization membership
+export interface UserOrganization {
+  id: string;
+  name: string;
+  title: string;
+  capacity: string; // 'admin', 'editor', 'member'
+}
+
 // Session data stored in cookie
 export interface SessionData {
   user: {
@@ -26,6 +34,7 @@ export interface SessionData {
     displayName: string;
     email: string;
     sysadmin: boolean;
+    organizations?: UserOrganization[];
   };
   apiToken: string;
   expiresAt: number;
