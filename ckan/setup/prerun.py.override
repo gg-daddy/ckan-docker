@@ -157,6 +157,26 @@ def init_datastore_db():
         connection.close()
 
 
+def configure_scheming():
+    """Configure scheming extension to use custom dataset schema."""
+    schema_source = "/srv/app/schema/dataset.yaml"
+    schema_dest = "/srv/app/src/ckanext-scheming/ckanext/scheming/dataset.yaml"
+
+    # Copy schema to ckanext-scheming package if source exists
+    if os.path.exists(schema_source):
+        import shutil
+        os.makedirs(os.path.dirname(schema_dest), exist_ok=True)
+        shutil.copy2(schema_source, schema_dest)
+        print(f"[prerun] Copied schema from {schema_source} to {schema_dest}")
+
+        # Configure scheming in ckan.ini using module path format
+        cmd = ["ckan", "config-tool", ckan_ini, "scheming.dataset_schemas = ckanext.scheming:dataset.yaml"]
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+        print("[prerun] Configured scheming.dataset_schemas")
+    else:
+        print(f"[prerun] Schema file not found at {schema_source}, skipping scheming config")
+
+
 def create_sysadmin():
 
     name = os.environ.get("CKAN_SYSADMIN_NAME")
@@ -205,6 +225,7 @@ if __name__ == "__main__":
         check_main_db_connection()
         init_db()
         update_plugins()
+        configure_scheming()
         check_datastore_db_connection()
         init_datastore_db()
         check_solr_connection()

@@ -27,6 +27,9 @@ RUN pip3 install -e 'git+https://github.com/ckan/ckanext-scheming.git@release-3.
 # Copy custom schema for scheming
 COPY --chown=ckan-sys:ckan-sys schema ${APP_DIR}/schema
 
+# Copy custom startup scripts (prerun.py.override handles scheming config)
+COPY --chown=ckan-sys:ckan-sys setup/prerun.py.override ${APP_DIR}/prerun.py
+
 ### Pages ###
 #RUN  pip3 install -e git+https://github.com/ckan/ckanext-pages.git#egg=ckanext-pages
 
@@ -37,8 +40,8 @@ COPY --chown=ckan-sys:ckan-sys schema ${APP_DIR}/schema
 # Clone the extension(s) your are writing for your own project in the `src` folder
 # to get them mounted in this image at runtime
 
-# Copy custom initialization scripts
-COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
+# Copy custom initialization scripts (if any exist)
+COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/ /docker-entrypoint.d/
 
 # Apply any patches needed to CKAN core or any of the built extensions (not the
 # runtime mounted ones)
