@@ -67,6 +67,36 @@ print(df.head())
 print(df.info())
 ```
 
+## Data Visualization
+
+### Category Distribution
+
+The chart below shows the distribution of articles across the four categories:
+
+<PlotlyBarChart
+  data={{ values: [
+    { category: "World", count: 30000 },
+    { category: "Sports", count: 30000 },
+    { category: "Business", count: 30000 },
+    { category: "Science/Tech", count: 30000 }
+  ]}}
+  xAxis="category"
+  yAxis="count"
+  title="AG News Category Distribution"
+/>
+
+### Sample Data Preview
+
+<FlatUiTable
+  data={{ url: '/data/ag-news-sample.csv' }}
+  bytes={5000}
+  parsingConfig={{}}
+/>
+
+### Excel Data View
+
+<Excel data={{ url: '/data/ag-news-sample.xlsx' }} />
+
 ## Data Structure
 
 The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/fancyzhx/ag_news) for detailed schema information.

@@ -1,0 +1,111 @@
+---
+datasetId: "chronos-time-series"
+title: "Chronos - Time Series Forecasting"
+description: "A comprehensive collection of time series datasets for forecasting tasks, including univariate and multivariate scenarios."
+author: "AutoGluon"
+lastUpdated: "2026-01-02"
+features:
+  showChart: true
+  showTable: true
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "autogluon/chronos_datasets"
+colabNotebook: "chronos-time-series.ipynb"
+---
+
+# Overview
+
+Chronos datasets is a comprehensive collection of time series data designed for forecasting tasks. It includes both univariate and multivariate time series from various domains.
+
+**Key Features:**
+- 67 different subsets covering diverse domains
+- Supports univariate and multivariate forecasting
+- Over 10 million rows of time series data
+- Used for training and evaluating Chronos foundation models
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Time Series Forecasting |
+| **Modality** | Tabular, Time-series |
+| **Size** | 10M - 100M rows |
+| **Downloads** | 13K+ monthly |
+| **Format** | parquet |
+| **License** | Other |
+
+## Data Preview
+
+### Time Series Line Chart
+
+The chart below shows a sample time series from the dataset:
+
+<LineChart
+  data={{ url: '/data/chronos-sample.csv' }}
+  xAxis="timestamp"
+  yAxis="target"
+  xAxisType="temporal"
+  title="Sample Time Series Data"
+/>
+
+### Plotly Interactive Chart
+
+<PlotlyLineChart
+  data={{ url: '/data/chronos-sample.csv' }}
+  xAxis="timestamp"
+  yAxis="target"
+  title="Interactive Time Series"
+/>
+
+## Quick Start
+
+### Using Hugging Face Datasets Library
+
+```python
+from datasets import load_dataset
+
+# Load the dataset
+dataset = load_dataset("autogluon/chronos_datasets", "dominick")
+
+# Explore the dataset
+print(dataset)
+print(dataset["train"][0])
+```
+
+### Using Pandas
+
+```python
+import pandas as pd
+from datasets import load_dataset
+
+# Load and convert to pandas
+dataset = load_dataset("autogluon/chronos_datasets", "dominick")
+df = dataset["train"].to_pandas()
+
+# Basic exploration
+print(df.head())
+print(df.info())
+```
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Time series forecasting model training
+- Foundation model pre-training
+- Benchmarking forecasting algorithms
+- Transfer learning experiments
+
+## Citation
+
+If you use this dataset in your research, please cite it appropriately. See the [dataset page](https://huggingface.co/datasets/autogluon/chronos_datasets) for the recommended citation format.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/autogluon/chronos_datasets)
+- [Dataset Viewer](https://huggingface.co/datasets/autogluon/chronos_datasets/viewer)
+- [ArXiv Paper](https://arxiv.org/abs/2403.07815)
+
+---
+
+*This dataset documentation showcases PortalJS LineChart and PlotlyLineChart components.*

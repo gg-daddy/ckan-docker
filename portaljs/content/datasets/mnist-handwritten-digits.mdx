@@ -67,6 +67,30 @@ print(df.head())
 print(df.info())
 ```
 
+## Data Visualization
+
+### Digit Distribution
+
+The chart below shows the distribution of digit classes (0-9):
+
+<PlotlyBarChart
+  data={{ values: [
+    { category: "0", count: 6903 },
+    { category: "1", count: 7877 },
+    { category: "2", count: 6990 },
+    { category: "3", count: 7141 },
+    { category: "4", count: 6824 },
+    { category: "5", count: 6313 },
+    { category: "6", count: 6876 },
+    { category: "7", count: 7293 },
+    { category: "8", count: 6825 },
+    { category: "9", count: 6958 }
+  ]}}
+  xAxis="category"
+  yAxis="count"
+  title="MNIST Digit Class Distribution"
+/>
+
 ## Data Structure
 
 The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/ylecun/mnist) for detailed schema information.

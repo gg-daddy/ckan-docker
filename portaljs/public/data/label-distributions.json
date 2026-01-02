@@ -1,0 +1,114 @@
+{
+  "ag_news": [
+    {
+      "category": "World",
+      "count": 30000
+    },
+    {
+      "category": "Sports",
+      "count": 30000
+    },
+    {
+      "category": "Business",
+      "count": 30000
+    },
+    {
+      "category": "Science/Tech",
+      "count": 30000
+    }
+  ],
+  "imdb": [
+    {
+      "category": "Positive",
+      "count": 25000
+    },
+    {
+      "category": "Negative",
+      "count": 25000
+    }
+  ],
+  "cifar10": [
+    {
+      "category": "airplane",
+      "count": 6000
+    },
+    {
+      "category": "automobile",
+      "count": 6000
+    },
+    {
+      "category": "bird",
+      "count": 6000
+    },
+    {
+      "category": "cat",
+      "count": 6000
+    },
+    {
+      "category": "deer",
+      "count": 6000
+    },
+    {
+      "category": "dog",
+      "count": 6000
+    },
+    {
+      "category": "frog",
+      "count": 6000
+    },
+    {
+      "category": "horse",
+      "count": 6000
+    },
+    {
+      "category": "ship",
+      "count": 6000
+    },
+    {
+      "category": "truck",
+      "count": 6000
+    }
+  ],
+  "mnist": [
+    {
+      "category": "0",
+      "count": 6903
+    },
+    {
+      "category": "1",
+      "count": 7877
+    },
+    {
+      "category": "2",
+      "count": 6990
+    },
+    {
+      "category": "3",
+      "count": 7141
+    },
+    {
+      "category": "4",
+      "count": 6824
+    },
+    {
+      "category": "5",
+      "count": 6313
+    },
+    {
+      "category": "6",
+      "count": 6876
+    },
+    {
+      "category": "7",
+      "count": 7293
+    },
+    {
+      "category": "8",
+      "count": 6825
+    },
+    {
+      "category": "9",
+      "count": 6958
+    }
+  ]
+}

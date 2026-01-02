@@ -67,6 +67,30 @@ print(df.head())
 print(df.info())
 ```
 
+## Data Visualization
+
+### Sentiment Distribution
+
+The chart below shows the distribution of positive and negative reviews:
+
+<PlotlyBarChart
+  data={{ values: [
+    { category: "Positive", count: 25000 },
+    { category: "Negative", count: 25000 }
+  ]}}
+  xAxis="category"
+  yAxis="count"
+  title="IMDB Sentiment Distribution"
+/>
+
+### Sample Reviews
+
+<FlatUiTable
+  data={{ url: '/data/imdb-sample.csv' }}
+  bytes={5000}
+  parsingConfig={{}}
+/>
+
 ## Data Structure
 
 The dataset contains the following splits and features. Refer to the [Hugging Face Dataset Card](https://huggingface.co/datasets/stanfordnlp/imdb) for detailed schema information.

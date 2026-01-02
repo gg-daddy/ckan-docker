@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
@@ -13,6 +14,44 @@ import ColabBanner from '@/components/ColabBanner';
 import { getDataset, CkanDataset } from '@/lib/ckan';
 import { getMDXForDataset, MDXFrontmatter } from '@/lib/mdx';
 
+// Dynamic imports for PortalJS components (client-side only)
+const FlatUiTable = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.FlatUiTable),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const PlotlyBarChart = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.PlotlyBarChart),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const PlotlyLineChart = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.PlotlyLineChart),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const LineChart = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.LineChart),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const Map = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.Map),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-96 rounded-lg" /> }
+);
+const Excel = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.Excel),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const PdfViewer = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.PdfViewer),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-96 rounded-lg" /> }
+);
+const VegaLite = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.VegaLite),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+const Plotly = dynamic(
+  () => import('@portaljs/components').then((mod) => mod.Plotly),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded-lg" /> }
+);
+
 interface DatasetPageProps {
   dataset: CkanDataset;
   mdxSource: MDXRemoteSerializeResult | null;
@@ -21,7 +60,17 @@ interface DatasetPageProps {
 
 // Custom MDX components
 const mdxComponents = {
-  // Add custom components here that can be used in MDX files
+  // PortalJS data visualization components
+  FlatUiTable,
+  PlotlyBarChart,
+  PlotlyLineChart,
+  LineChart,
+  Map,
+  Excel,
+  PdfViewer,
+  VegaLite,
+  Plotly,
+  // Styling components
   h1: (props: any) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
   h2: (props: any) => <h2 className="text-2xl font-semibold mt-6 mb-3" {...props} />,
   h3: (props: any) => <h3 className="text-xl font-medium mt-5 mb-2" {...props} />,

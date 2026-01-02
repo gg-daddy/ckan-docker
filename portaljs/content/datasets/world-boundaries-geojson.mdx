@@ -1,0 +1,133 @@
+---
+datasetId: "world-boundaries-geojson"
+title: "World Administrative Boundaries (GeoJSON)"
+description: "Administrative boundary data in GeoJSON format for countries worldwide. ADM2 level boundaries for geographic visualization and analysis."
+author: "c1587s"
+lastUpdated: "2026-01-02"
+features:
+  showChart: false
+  showTable: false
+  showDownloadButton: true
+  showResources: true
+huggingFaceId: "c1587s/adm2-geojson-dataset"
+colabNotebook: "world-boundaries-geojson.ipynb"
+---
+
+# Overview
+
+This dataset contains administrative boundary data in GeoJSON format for countries around the world. It provides ADM2 level (district/county level) boundaries suitable for geographic visualization, spatial analysis, and mapping applications.
+
+**Key Features:**
+- GeoJSON format for easy web integration
+- ADM2 level administrative boundaries
+- Coverage of multiple countries
+- Compatible with Leaflet, MapLibre, and other mapping libraries
+
+## Dataset Information
+
+| Property | Value |
+|----------|-------|
+| **Task** | Geographic Visualization |
+| **Modality** | Geospatial |
+| **Size** | 8.05 GB (all countries) |
+| **Downloads** | 471+ monthly |
+| **Format** | GeoJSON |
+| **License** | Open |
+
+## Interactive Map
+
+The map below displays sample administrative boundaries from Aruba (ABW):
+
+<Map
+  layers={[{
+    data: { url: '/data/sample-boundaries.geojson' },
+    name: 'Administrative Boundaries',
+    tooltip: { propNames: ['NAME_1', 'NAME_2', 'TYPE_2'] },
+    colorScale: { starting: '#3b82f6', ending: '#1e40af' }
+  }]}
+  center={{ latitude: 12.5, longitude: -70 }}
+  zoom={10}
+  title="Aruba Administrative Boundaries"
+  style={{ height: '400px', width: '100%' }}
+/>
+
+## Quick Start
+
+### Using in JavaScript/React
+
+```javascript
+// Fetch GeoJSON data
+const response = await fetch('/data/sample-boundaries.geojson');
+const geojson = await response.json();
+
+// Use with Leaflet
+L.geoJSON(geojson).addTo(map);
+```
+
+### Using Hugging Face Datasets
+
+```python
+from huggingface_hub import hf_hub_download
+
+# Download specific country file
+file_path = hf_hub_download(
+    repo_id="c1587s/adm2-geojson-dataset",
+    filename="ABW_adm2.geojson",
+    repo_type="dataset"
+)
+
+# Load with geopandas
+import geopandas as gpd
+gdf = gpd.read_file(file_path)
+print(gdf.head())
+```
+
+## GeoJSON Structure
+
+```json
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME_1": "Region Name",
+        "NAME_2": "District Name",
+        "TYPE_2": "Boundary Type"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [...]
+      }
+    }
+  ]
+}
+```
+
+## Use Cases
+
+This dataset is commonly used for:
+
+- Web mapping applications
+- Geographic data visualization
+- Spatial analysis and GIS
+- Choropleth maps and dashboards
+- Location-based services
+
+## Available Countries
+
+The full dataset includes administrative boundaries for:
+- ABW (Aruba), AFG (Afghanistan), AGO (Angola)
+- And many more countries...
+
+See the [full file list](https://huggingface.co/datasets/c1587s/adm2-geojson-dataset/tree/main) for all available countries.
+
+## Additional Resources
+
+- [Hugging Face Dataset Page](https://huggingface.co/datasets/c1587s/adm2-geojson-dataset)
+- [GeoJSON Specification](https://geojson.org/)
+- [Leaflet Documentation](https://leafletjs.com/)
+
+---
+
+*This dataset documentation showcases the PortalJS Map component with GeoJSON data.*
