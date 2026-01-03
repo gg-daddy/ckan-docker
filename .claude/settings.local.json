@@ -15,7 +15,13 @@
       "Bash(ls:*)",
       "Bash(curl:*)",
       "Bash(python3:*)",
-      "Bash(docker compose:*)"
+      "Bash(docker compose:*)",
+      "Bash(docker port:*)",
+      "Bash(lsof:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

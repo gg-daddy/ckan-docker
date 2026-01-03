@@ -2,15 +2,17 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState, useCallback, useRef, useEffect } from 'react';
-import Layout from '@/components/Layout';
+import { ThaiGovLayout } from '@/components/thailand';
 import { MobileFilterDrawer } from '@/components/search/FacetSidebar';
 import DatasetListItem, { DatasetListItemSkeleton } from '@/components/search/DatasetListItem';
+import DatasetDetailPanel from '@/components/search/DatasetDetailPanel';
 import ResourceBadge from '@/components/ResourceBadge';
 import {
   searchDatasetsWithFacets,
   getTagsWithCounts,
   getOrganizationsWithCounts,
   getFormatsWithCounts,
+  fetchDatasetClient,
   CkanDataset,
   TagWithCount,
   OrganizationWithCount,
@@ -46,7 +48,7 @@ function FilterDropdown({
   countKey = 'count',
 }: {
   label: string;
-  options: { name: string; display_name?: string; title?: string; count: number }[];
+  options: { name: string; display_name?: string; title?: string; count?: number; package_count?: number }[];
   selectedValues: string[];
   onToggle: (value: string) => void;
   countKey?: string;
@@ -123,7 +125,7 @@ function FilterDropdown({
                       )}
                     </div>
                     <span className="flex-1 truncate">{displayName}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{option.count}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{option.count ?? option.package_count ?? 0}</span>
                   </button>
                 );
               })
@@ -154,9 +156,56 @@ export default function SearchPage({
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedDataset, setSelectedDataset] = useState<CkanDataset | null>(null);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
+  const detailPanelRef = useRef<HTMLDivElement>(null);
 
   const hasActiveFilters = selectedTags.length > 0 || selectedOrganizations.length > 0 || selectedFormats.length > 0;
   const activeFilterCount = selectedTags.length + selectedOrganizations.length + selectedFormats.length;
+
+  // Sync selected dataset with URL query param
+  useEffect(() => {
+    const selectedId = router.query.selectedId as string;
+    if (selectedId) {
+      // Check if we already have this dataset in our list
+      const existingDataset = datasets.find(d => d.name === selectedId || d.id === selectedId);
+      if (existingDataset) {
+        setSelectedDataset(existingDataset);
+      } else {
+        // Fetch the dataset details
+        setIsDetailLoading(true);
+        fetchDatasetClient(selectedId)
+          .then(dataset => {
+            setSelectedDataset(dataset);
+          })
+          .finally(() => {
+            setIsDetailLoading(false);
+          });
+      }
+    } else {
+      setSelectedDataset(null);
+    }
+  }, [router.query.selectedId, datasets]);
+
+  // Handle dataset selection
+  const handleDatasetSelect = useCallback((dataset: CkanDataset) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('selectedId', dataset.name);
+    router.push(`/search?${params.toString()}`, undefined, { shallow: true });
+    // Open mobile drawer on smaller screens
+    if (window.innerWidth < 1024) {
+      setMobileDetailOpen(true);
+    }
+  }, [router]);
+
+  // Handle closing the detail panel
+  const handleDetailClose = useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.delete('selectedId');
+    const newUrl = params.toString() ? `/search?${params.toString()}` : '/search';
+    router.push(newUrl, undefined, { shallow: true });
+    setMobileDetailOpen(false);
+  }, [router]);
 
   // Build URL with current filters
   const buildSearchUrl = useCallback((updates: Partial<{
@@ -228,7 +277,7 @@ export default function SearchPage({
   const currentSortLabel = SORT_OPTIONS.find(s => s.value === sort)?.label || 'Relevance';
 
   return (
-    <Layout
+    <ThaiGovLayout
       title="Search Datasets"
       description={`Search through ${totalCount} datasets`}
     >
@@ -431,114 +480,176 @@ export default function SearchPage({
         </div>
       </div>
 
-      {/* Results */}
+      {/* Results - Master-Detail Layout */}
       <div className="bg-gray-50 dark:bg-gray-900 min-h-[50vh]">
         <div className="container-main py-6">
-          {datasets.length > 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
-              {datasets.map((dataset) => (
-                <DatasetListItem key={dataset.id} dataset={dataset} />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-center py-16">
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                No datasets found
-              </h3>
-              <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-                {hasActiveFilters
-                  ? 'Try removing some filters or adjusting your search.'
-                  : query
-                  ? 'Try different keywords or browse all datasets.'
-                  : 'No datasets are available at this time.'}
-              </p>
-              {hasActiveFilters && (
-                <button
-                  onClick={handleClearAll}
-                  className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
-                >
-                  Clear all filters
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <nav className="mt-6 flex justify-center">
-              <div className="inline-flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`p-2 rounded-md transition-colors ${
-                    currentPage === 1
-                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum: number;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => handlePageChange(pageNum)}
-                      className={`min-w-[40px] py-2 px-3 text-sm font-medium rounded-md transition-colors ${
-                        currentPage === pageNum
-                          ? 'bg-primary-600 text-white'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      }`}
+          {/* Conditional grid: full-width when no selection, split when selected (desktop only) */}
+          <div className={`${selectedDataset ? 'lg:grid lg:grid-cols-5 lg:gap-6' : ''}`}>
+            {/* Left: Dataset List */}
+            <div className={`${selectedDataset ? 'lg:col-span-2' : ''}`}>
+              {/* Scrollable list with max-height when split view on desktop */}
+              <div className={selectedDataset ? 'lg:max-h-[calc(100vh-220px)] lg:overflow-y-auto lg:pr-2' : ''}>
+                {datasets.length > 0 ? (
+                  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
+                    {datasets.map((dataset) => (
+                      <DatasetListItem
+                        key={dataset.id}
+                        dataset={dataset}
+                        isSelected={selectedDataset?.id === dataset.id}
+                        onSelect={handleDatasetSelect}
+                        compact={!!selectedDataset}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-center py-16">
+                    <svg
+                      className="mx-auto h-12 w-12 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                     >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+                      No datasets found
+                    </h3>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+                      {hasActiveFilters
+                        ? 'Try removing some filters or adjusting your search.'
+                        : query
+                        ? 'Try different keywords or browse all datasets.'
+                        : 'No datasets are available at this time.'}
+                    </p>
+                    {hasActiveFilters && (
+                      <button
+                        onClick={handleClearAll}
+                        className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                      >
+                        Clear all filters
+                      </button>
+                    )}
+                  </div>
+                )}
 
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`p-2 rounded-md transition-colors ${
-                    currentPage === totalPages
-                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <nav className="mt-6 flex justify-center">
+                    <div className="inline-flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`p-2 rounded-md transition-colors ${
+                          currentPage === 1
+                            ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                      >
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => handlePageChange(pageNum)}
+                            className={`min-w-[40px] py-2 px-3 text-sm font-medium rounded-md transition-colors ${
+                              currentPage === pageNum
+                                ? 'bg-primary-600 text-white'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`p-2 rounded-md transition-colors ${
+                          currentPage === totalPages
+                            ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                      >
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </nav>
+                )}
               </div>
-            </nav>
-          )}
+            </div>
+
+            {/* Right: Detail Panel - Desktop only */}
+            {(selectedDataset || isDetailLoading) && (
+              <div
+                ref={detailPanelRef}
+                className="hidden lg:block lg:col-span-3 lg:sticky lg:top-36 lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto"
+              >
+                <DatasetDetailPanel
+                  dataset={selectedDataset}
+                  isLoading={isDetailLoading}
+                  onClose={handleDetailClose}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Mobile Detail Drawer */}
+      {(selectedDataset || isDetailLoading) && (
+        <div
+          className={`lg:hidden fixed inset-0 z-50 transition-opacity duration-300 ${
+            mobileDetailOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={handleDetailClose}
+          />
+          {/* Drawer */}
+          <div
+            className={`absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[85vh] overflow-y-auto transition-transform duration-300 ${
+              mobileDetailOpen ? 'translate-y-0' : 'translate-y-full'
+            }`}
+          >
+            {/* Drag handle */}
+            <div className="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3" />
+            </div>
+            <div className="p-4">
+              <DatasetDetailPanel
+                dataset={selectedDataset}
+                isLoading={isDetailLoading}
+                onClose={handleDetailClose}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile filter drawer */}
       <MobileFilterDrawer
@@ -555,7 +666,7 @@ export default function SearchPage({
         onFormatToggle={handleFormatToggle}
         onClearAll={handleClearAll}
       />
-    </Layout>
+    </ThaiGovLayout>
   );
 }
 

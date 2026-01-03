@@ -6,7 +6,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import Layout from '@/components/Layout';
+import { ThaiGovLayout } from '@/components/thailand';
 import ResourceList from '@/components/ResourceList';
 import ResourceBadge from '@/components/ResourceBadge';
 import ColabButton from '@/components/ColabButton';
@@ -138,7 +138,7 @@ export default function DatasetPage({
   frontmatter,
 }: DatasetPageProps) {
   return (
-    <Layout
+    <ThaiGovLayout
       title={dataset.title}
       description={dataset.notes?.substring(0, 160)}
     >
@@ -451,7 +451,7 @@ export default function DatasetPage({
                             .filter(Boolean)
                         ),
                       ].map((format) => (
-                        <ResourceBadge key={format} format={format as string} size="sm" />
+                        <ResourceBadge key={format} format={format as string} />
                       ))}
                     </dd>
                   </div>
@@ -467,7 +467,7 @@ export default function DatasetPage({
           </div>
         </div>
       </div>
-    </Layout>
+    </ThaiGovLayout>
   );
 }
 

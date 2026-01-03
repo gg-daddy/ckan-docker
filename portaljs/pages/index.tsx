@@ -2,9 +2,14 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Layout from '@/components/Layout';
 import DatasetCard from '@/components/DatasetCard';
 import TopicFilters from '@/components/home/TopicFilters';
+import {
+  ThaiGovLayout,
+  useThaiLanguage,
+  formatThaiNumber,
+  AgencyAvatar,
+} from '@/components/thailand';
 import {
   searchDatasets,
   getOrganizations,
@@ -21,8 +26,12 @@ interface HomePageProps {
   topics: TagWithCount[];
 }
 
-// Animated counter component
+// Bilingual text helper type
+type BilingualText = { th: string; en: string };
+
+// Animated counter component with Thai numeral support
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const { lang } = useThaiLanguage();
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
@@ -46,17 +55,19 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
   return (
     <span>
-      {displayValue.toLocaleString()}{suffix}
+      {formatThaiNumber(displayValue, lang)}{suffix}
     </span>
   );
 }
 
-export default function HomePage({
+// Homepage content component (uses language context)
+function HomePageContent({
   recentDatasets,
   organizations,
   totalDatasets,
   topics,
 }: HomePageProps) {
+  const { lang, t } = useThaiLanguage();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -69,125 +80,151 @@ export default function HomePage({
     }
   };
 
+  // Bilingual content
+  const content = {
+    heroTitle1: { th: 'ศูนย์ข้อมูลเปิด', en: 'Open Government' },
+    heroTitle2: { th: 'ภาครัฐ', en: 'Data' },
+    heroSubtitle: {
+      th: 'ค้นหาและเข้าถึงข้อมูลจากหน่วยงานภาครัฐของประเทศไทย เพื่อสนับสนุนการวิจัย การพัฒนา และความโปร่งใสของภาครัฐ',
+      en: 'Discover, analyze, and download open datasets to power your research, applications, and decision-making.',
+    },
+    searchPlaceholder: {
+      th: 'ค้นหาชุดข้อมูล หัวข้อ หรือหน่วยงาน...',
+      en: 'Search for datasets, topics, or keywords...',
+    },
+    searchButton: { th: 'ค้นหา', en: 'Search' },
+    statsDatasets: { th: 'ชุดข้อมูล', en: 'Datasets Available' },
+    statsOrganizations: { th: 'หน่วยงาน', en: 'Agencies' },
+    statsTopics: { th: 'หัวข้อ', en: 'Topics' },
+    statsApi: { th: 'API พร้อมใช้งาน', en: 'API Available' },
+    viewApis: { th: 'ดู APIs', en: 'View APIs' },
+    viewApisDesc: {
+      th: 'เข้าถึงชุดข้อมูลผ่าน CKAN API ของเรา',
+      en: 'Access datasets programmatically through our CKAN API.',
+    },
+    openDataLicense: { th: 'สัญญาอนุญาตข้อมูลเปิด', en: 'Open Data License' },
+    openDataLicenseDesc: {
+      th: 'เรียนรู้วิธีการใช้งานและแบ่งปันข้อมูลเปิดของเรา',
+      en: 'Learn about how you can use and share our open data.',
+    },
+    giveFeedback: { th: 'ให้ข้อเสนอแนะ', en: 'Give Feedback' },
+    giveFeedbackDesc: {
+      th: 'แบ่งปันความคิดเห็นและช่วยเราปรับปรุงพอร์ทัล',
+      en: 'Share your thoughts and help us improve our portal.',
+    },
+    recentlyUpdated: { th: 'อัปเดตล่าสุด', en: 'Recently Updated' },
+    recentlyUpdatedDesc: { th: 'สำรวจชุดข้อมูลล่าสุดของเรา', en: 'Explore our latest datasets' },
+    viewAllDatasets: { th: 'ดูชุดข้อมูลทั้งหมด', en: 'View all datasets' },
+    noDatasets: { th: 'ยังไม่มีชุดข้อมูล', en: 'No datasets yet' },
+    noDatasetsDesc: {
+      th: 'เริ่มต้นโดยการสร้างชุดข้อมูลแรกของคุณในพอร์ทัลผู้ดูแลระบบ',
+      en: 'Get started by creating your first dataset in the admin portal.',
+    },
+    goToAdmin: { th: 'ไปที่หน้าผู้ดูแลระบบ', en: 'Go to Admin' },
+    agenciesTitle: { th: 'หน่วยงาน', en: 'Government Agencies' },
+    agenciesDesc: { th: 'สำรวจชุดข้อมูลตามหน่วยงาน', en: 'Explore datasets by government agency' },
+  };
+
   return (
-    <Layout hideHeaderSearch>
-      {/* Hero Section - data.gov.sg style */}
-      <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
-        <div className="container-main py-16 sm:py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Two-line hero title like data.gov.sg */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-              Real Data for
-              <br />
-              <span className="text-primary-600 dark:text-primary-400">Real Impact</span>
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Discover, analyze, and download open datasets to power your research, applications, and decision-making.
-            </p>
+    <>
+      {/* Hero Section - Thai Government Style */}
+      <section className="th-hero">
+        <div className="th-hero-container">
+          <h1 className="th-hero-title">
+            {t(content.heroTitle1)}
+            <span className="th-hero-highlight">{t(content.heroTitle2)}</span>
+          </h1>
+          <p className="th-hero-subtitle">
+            {t(content.heroSubtitle)}
+          </p>
 
-            {/* Search bar - Prominent, centered */}
-            <form onSubmit={handleSearch} className="mt-10 max-w-2xl mx-auto">
-              <div className="relative">
-                <svg
-                  className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for datasets, topics, or keywords..."
-                  className="w-full pl-14 pr-32 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-base text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-lg"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-full transition-colors"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
+          {/* Search bar */}
+          <form onSubmit={handleSearch} className="th-search-box">
+            <div className="th-search-input-wrapper">
+              <svg
+                className="th-search-icon"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t(content.searchPlaceholder)}
+                className="th-search-input"
+              />
+              <button type="submit" className="th-btn th-btn-primary">
+                {t(content.searchButton)}
+              </button>
+            </div>
+          </form>
 
-            {/* Topic filters - Colored pills */}
-            {topics.length > 0 && (
-              <div className="mt-10">
-                <TopicFilters topics={topics} maxDisplay={6} />
-              </div>
-            )}
+          {/* Topic filters */}
+          {topics.length > 0 && (
+            <div className="mt-8">
+              <TopicFilters topics={topics} maxDisplay={6} />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="th-stats-section">
+        <div className="th-stats-container">
+          <div className="th-stat-card">
+            <div className="th-stat-value">
+              <AnimatedCounter value={totalDatasets} suffix="+" />
+            </div>
+            <div className="th-stat-label">{t(content.statsDatasets)}</div>
+          </div>
+          <div className="th-stat-card">
+            <div className="th-stat-value">
+              <AnimatedCounter value={organizations.length} />
+            </div>
+            <div className="th-stat-label">{t(content.statsOrganizations)}</div>
+          </div>
+          <div className="th-stat-card">
+            <div className="th-stat-value">
+              <AnimatedCounter value={topics.length} />
+            </div>
+            <div className="th-stat-label">{t(content.statsTopics)}</div>
+          </div>
+          <div className="th-stat-card">
+            <div className="th-stat-value">API</div>
+            <div className="th-stat-label">{t(content.statsApi)}</div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section - data.gov.sg style with large numbers */}
-      <section className="bg-white dark:bg-gray-800 border-y border-gray-200 dark:border-gray-700">
-        <div className="container-main py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl sm:text-5xl font-bold text-primary-600 dark:text-primary-400">
-                <AnimatedCounter value={totalDatasets} suffix="+" />
-              </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Datasets Available
-              </div>
-            </div>
-            <div>
-              <div className="text-4xl sm:text-5xl font-bold text-green-600 dark:text-green-400">
-                <AnimatedCounter value={organizations.length} />
-              </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Organizations
-              </div>
-            </div>
-            <div>
-              <div className="text-4xl sm:text-5xl font-bold text-orange-600 dark:text-orange-400">
-                <AnimatedCounter value={topics.length} />
-              </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Topics
-              </div>
-            </div>
-            <div>
-              <div className="text-4xl sm:text-5xl font-bold text-purple-600 dark:text-purple-400">
-                API
-              </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Available
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Feature Cards Section - data.gov.sg style */}
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="container-main py-12">
+      {/* Feature Cards Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* View API Card */}
             <Link
               href="/api/3/action/status_show"
               target="_blank"
-              className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
+              className="group relative bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg hover:border-th-orange-300 transition-all duration-200"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                  <svg className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex-shrink-0 p-3 bg-th-navy-100 rounded-lg group-hover:bg-th-navy-200 transition-colors">
+                  <svg className="h-6 w-6 text-th-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    View APIs
+                  <h3 className="text-lg font-semibold text-th-navy-600 group-hover:text-th-orange-500 transition-colors">
+                    {t(content.viewApis)}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Access datasets programmatically through our CKAN API.
+                  <p className="mt-1 text-sm text-gray-600">
+                    {t(content.viewApisDesc)}
                   </p>
                 </div>
               </div>
-              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-th-orange-500 transition-colors">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -197,24 +234,24 @@ export default function HomePage({
             {/* Open Data License Card */}
             <Link
               href="/about"
-              className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
+              className="group relative bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg hover:border-th-orange-300 transition-all duration-200"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors">
-                  <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex-shrink-0 p-3 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
+                  <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    Open Data License
+                  <h3 className="text-lg font-semibold text-th-navy-600 group-hover:text-th-orange-500 transition-colors">
+                    {t(content.openDataLicense)}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Learn about how you can use and share our open data.
+                  <p className="mt-1 text-sm text-gray-600">
+                    {t(content.openDataLicenseDesc)}
                   </p>
                 </div>
               </div>
-              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-th-orange-500 transition-colors">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -224,24 +261,24 @@ export default function HomePage({
             {/* Feedback Card */}
             <Link
               href="/feedback"
-              className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
+              className="group relative bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg hover:border-th-orange-300 transition-all duration-200"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors">
-                  <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex-shrink-0 p-3 bg-th-orange-100 rounded-lg group-hover:bg-th-orange-200 transition-colors">
+                  <svg className="h-6 w-6 text-th-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    Give Feedback
+                  <h3 className="text-lg font-semibold text-th-navy-600 group-hover:text-th-orange-500 transition-colors">
+                    {t(content.giveFeedback)}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Share your thoughts and help us improve our portal.
+                  <p className="mt-1 text-sm text-gray-600">
+                    {t(content.giveFeedbackDesc)}
                   </p>
                 </div>
               </div>
-              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <div className="absolute top-6 right-6 text-gray-400 group-hover:text-th-orange-500 transition-colors">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -251,23 +288,23 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* Most Used Datasets Section */}
-      <section className="bg-white dark:bg-gray-800">
-        <div className="container-main py-12">
+      {/* Recently Updated Datasets Section */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Recently Updated
+              <h2 className="text-2xl font-heading font-bold text-th-navy-600">
+                {t(content.recentlyUpdated)}
               </h2>
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Explore our latest datasets
+              <p className="mt-1 text-sm text-gray-600">
+                {t(content.recentlyUpdatedDesc)}
               </p>
             </div>
             <Link
               href="/search"
-              className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-th-orange-500 hover:text-th-orange-600 transition-colors"
             >
-              View all datasets
+              {t(content.viewAllDatasets)}
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -281,7 +318,7 @@ export default function HomePage({
               ))}
             </div>
           ) : (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-xl text-center py-16 px-6">
+            <div className="bg-gray-50 rounded-xl text-center py-16 px-6">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"
                 fill="none"
@@ -295,17 +332,17 @@ export default function HomePage({
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                No datasets yet
+              <h3 className="mt-4 text-lg font-semibold text-th-navy-600">
+                {t(content.noDatasets)}
               </h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Get started by creating your first dataset in the admin portal.
+              <p className="mt-2 text-sm text-gray-500">
+                {t(content.noDatasetsDesc)}
               </p>
               <Link
                 href="/user/login"
-                className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-th-navy-600 hover:bg-th-navy-700 text-white font-medium rounded-lg transition-colors"
               >
-                Go to Admin
+                {t(content.goToAdmin)}
               </Link>
             </div>
           )}
@@ -314,15 +351,15 @@ export default function HomePage({
 
       {/* Organizations Section */}
       {organizations.length > 0 && (
-        <section className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-          <div className="container-main py-12">
+        <section className="py-12 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Organizations
+                <h2 className="text-2xl font-heading font-bold text-th-navy-600">
+                  {t(content.agenciesTitle)}
                 </h2>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  Explore datasets by organization
+                <p className="mt-1 text-sm text-gray-600">
+                  {t(content.agenciesDesc)}
                 </p>
               </div>
             </div>
@@ -331,22 +368,16 @@ export default function HomePage({
                 <Link
                   key={org.id}
                   href={`/search?org=${encodeURIComponent(org.name)}`}
-                  className="group bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200 text-center"
+                  className="group bg-white rounded-xl p-5 border border-gray-200 hover:shadow-md hover:border-th-orange-300 transition-all duration-200 text-center"
                 >
-                  {org.image_url ? (
-                    <img
-                      src={org.image_url}
-                      alt={org.title}
-                      className="h-14 w-14 mx-auto object-contain"
+                  <div className="flex justify-center">
+                    <AgencyAvatar
+                      imageUrl={org.image_url}
+                      name={org.title}
+                      size="md"
                     />
-                  ) : (
-                    <div className="h-14 w-14 mx-auto bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 rounded-full flex items-center justify-center group-hover:from-primary-200 group-hover:to-primary-300 dark:group-hover:from-primary-900/50 dark:group-hover:to-primary-800/50 transition-colors">
-                      <span className="text-primary-600 dark:text-primary-400 font-bold text-xl">
-                        {org.title.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <p className="mt-4 text-sm font-medium text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 truncate transition-colors">
+                  </div>
+                  <p className="mt-4 text-sm font-medium text-th-navy-600 group-hover:text-th-orange-500 truncate transition-colors">
                     {org.title}
                   </p>
                 </Link>
@@ -355,7 +386,15 @@ export default function HomePage({
           </div>
         </section>
       )}
-    </Layout>
+    </>
+  );
+}
+
+export default function HomePage(props: HomePageProps) {
+  return (
+    <ThaiGovLayout>
+      <HomePageContent {...props} />
+    </ThaiGovLayout>
   );
 }
 

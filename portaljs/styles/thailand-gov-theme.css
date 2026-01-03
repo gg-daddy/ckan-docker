@@ -1,0 +1,1159 @@
+/**
+ * Thailand Government Visual Identity Theme
+ * Based on official Thai government websites (DGA, thaigov.go.th)
+ *
+ * Color System:
+ * - Navy Blue: Official government primary color
+ * - Orange: DGA accent color (Digital Government)
+ * - Gold: Royal/ceremonial highlights
+ */
+
+/* ============================================
+   1. THAI GOVERNMENT COLOR TOKENS
+   ============================================ */
+
+:root {
+  /* Primary Colors - Royal Thai Government Navy */
+  --th-navy-50: #E8EDF4;
+  --th-navy-100: #C5D1E3;
+  --th-navy-200: #9EB3CF;
+  --th-navy-300: #7795BB;
+  --th-navy-400: #5A7EAD;
+  --th-navy-500: #3D679F;
+  --th-navy-600: #1E3A5F;  /* Primary - Main navigation/headers */
+  --th-navy-700: #18305A;
+  --th-navy-800: #0D1F33;  /* Dark - Footer */
+  --th-navy-900: #071525;
+
+  /* Accent Colors - DGA Orange */
+  --th-orange-50: #FFF3E6;
+  --th-orange-100: #FFE0BF;
+  --th-orange-200: #FFCC95;
+  --th-orange-300: #FFB86B;
+  --th-orange-400: #FFA84B;
+  --th-orange-500: #F26522;  /* Primary accent - CTAs */
+  --th-orange-600: #D94E0F;
+  --th-orange-700: #BF3D00;
+  --th-orange-800: #A33300;
+  --th-orange-900: #862A00;
+
+  /* Royal Gold */
+  --th-gold-50: #FBF7E6;
+  --th-gold-100: #F5EABD;
+  --th-gold-200: #EFDC94;
+  --th-gold-300: #E6C65C;
+  --th-gold-400: #D9B334;
+  --th-gold-500: #C9A227;  /* Royal gold */
+  --th-gold-600: #A8861E;
+  --th-gold-700: #876B16;
+  --th-gold-800: #66500F;
+  --th-gold-900: #453609;
+
+  /* Thai Flag Colors (for special use) */
+  --th-flag-red: #A51931;
+  --th-flag-white: #FFFFFF;
+  --th-flag-blue: #2D2A4A;
+
+  /* Semantic Colors */
+  --th-success: #28A745;
+  --th-warning: #FFC107;
+  --th-error: #DC3545;
+  --th-info: #17A2B8;
+
+  /* Background Colors */
+  --th-bg-primary: #FFFFFF;
+  --th-bg-secondary: #F8F9FA;
+  --th-bg-tertiary: #F1F3F5;
+
+  /* Text Colors */
+  --th-text-primary: #212529;
+  --th-text-secondary: #6C757D;
+  --th-text-muted: #ADB5BD;
+  --th-text-inverse: #FFFFFF;
+
+  /* Border Colors */
+  --th-border-light: #E9ECEF;
+  --th-border-default: #DEE2E6;
+  --th-border-dark: #CED4DA;
+}
+
+/* Dark mode overrides */
+.dark {
+  --th-bg-primary: #1A1A1A;
+  --th-bg-secondary: #242424;
+  --th-bg-tertiary: #2E2E2E;
+
+  --th-text-primary: #F5F5F5;
+  --th-text-secondary: #A3A3A3;
+  --th-text-muted: #737373;
+
+  --th-border-light: #333333;
+  --th-border-default: #404040;
+  --th-border-dark: #525252;
+}
+
+/* ============================================
+   2. THAI TYPOGRAPHY SYSTEM
+   ============================================ */
+
+/* Import Thai-optimized fonts */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Prompt:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Font Families */
+  --font-thai-body: 'Sarabun', 'Noto Sans Thai', system-ui, sans-serif;
+  --font-thai-heading: 'Prompt', 'Noto Sans Thai', system-ui, sans-serif;
+  --font-english: 'Inter', 'Sarabun', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Thai-optimized font sizes (slightly larger for readability) */
+  --th-text-xs: 0.8125rem;    /* 13px */
+  --th-text-sm: 0.9375rem;    /* 15px */
+  --th-text-base: 1.0625rem;  /* 17px */
+  --th-text-lg: 1.1875rem;    /* 19px */
+  --th-text-xl: 1.375rem;     /* 22px */
+  --th-text-2xl: 1.625rem;    /* 26px */
+  --th-text-3xl: 2rem;        /* 32px */
+  --th-text-4xl: 2.5rem;      /* 40px */
+  --th-text-5xl: 3rem;        /* 48px */
+
+  /* Thai-optimized line heights */
+  --th-leading-tight: 1.4;
+  --th-leading-normal: 1.7;
+  --th-leading-relaxed: 1.9;
+  --th-leading-loose: 2.1;
+}
+
+/* Apply Thai font to body when Thai theme is active */
+[data-theme="thailand"],
+.th-theme {
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-base);
+  line-height: var(--th-leading-normal);
+}
+
+[data-theme="thailand"] h1,
+[data-theme="thailand"] h2,
+[data-theme="thailand"] h3,
+[data-theme="thailand"] h4,
+[data-theme="thailand"] h5,
+[data-theme="thailand"] h6,
+.th-theme h1,
+.th-theme h2,
+.th-theme h3,
+.th-theme h4,
+.th-theme h5,
+.th-theme h6 {
+  font-family: var(--font-thai-heading);
+  font-weight: 600;
+  line-height: var(--th-leading-tight);
+}
+
+/* ============================================
+   3. GOVERNMENT TRUST BANNER
+   ============================================ */
+
+.th-gov-banner {
+  background-color: var(--th-navy-600);
+  color: var(--th-text-inverse);
+  padding: 0.5rem 0;
+  font-size: var(--th-text-sm);
+}
+
+.th-gov-banner-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.th-gov-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--th-gold-500);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.th-gov-indicator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--th-navy-800);
+}
+
+.th-gov-banner-text {
+  color: var(--th-text-inverse);
+}
+
+.th-gov-banner-text-th {
+  font-family: var(--font-thai-body);
+}
+
+.th-gov-verify-link {
+  color: var(--th-gold-300);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+  transition: color 0.2s ease;
+}
+
+.th-gov-verify-link:hover {
+  color: var(--th-gold-200);
+}
+
+/* ============================================
+   4. MAIN HEADER
+   ============================================ */
+
+.th-header {
+  background-color: var(--th-bg-primary);
+  border-bottom: 1px solid var(--th-border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.th-header-main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Logo Section */
+.th-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.th-garuda-logo {
+  width: 3rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+}
+
+.th-garuda-logo img,
+.th-garuda-logo svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.th-site-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.th-title-thai {
+  font-family: var(--font-thai-heading);
+  font-size: var(--th-text-lg);
+  font-weight: 600;
+  color: var(--th-navy-600);
+}
+
+.th-title-english {
+  font-family: var(--font-english);
+  font-size: var(--th-text-sm);
+  font-weight: 500;
+  color: var(--th-text-secondary);
+}
+
+/* Utility Section */
+.th-utility-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.th-utility-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--th-border-default);
+  background: var(--th-bg-primary);
+  color: var(--th-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.th-utility-btn:hover {
+  background: var(--th-bg-secondary);
+  color: var(--th-navy-600);
+  border-color: var(--th-navy-300);
+}
+
+.th-utility-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Language Switcher */
+.th-lang-switcher {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--th-border-default);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.th-lang-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--th-text-sm);
+  font-weight: 500;
+  background: var(--th-bg-primary);
+  color: var(--th-text-secondary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.th-lang-btn:not(:last-child) {
+  border-right: 1px solid var(--th-border-default);
+}
+
+.th-lang-btn:hover {
+  background: var(--th-bg-secondary);
+}
+
+.th-lang-btn.active {
+  background: var(--th-navy-600);
+  color: var(--th-text-inverse);
+}
+
+.th-lang-btn-th {
+  font-family: var(--font-thai-body);
+}
+
+/* ============================================
+   5. NAVIGATION
+   ============================================ */
+
+.th-nav {
+  background-color: var(--th-navy-600);
+}
+
+.th-nav-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.th-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.th-nav-item {
+  position: relative;
+}
+
+.th-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-base);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.th-nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--th-text-inverse);
+}
+
+.th-nav-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--th-text-inverse);
+  border-bottom-color: var(--th-orange-500);
+}
+
+.th-nav-link-sub {
+  font-size: var(--th-text-sm);
+  color: var(--th-text-muted);
+  margin-left: 0.25rem;
+}
+
+/* Navigation Dropdown */
+.th-nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: var(--th-bg-primary);
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+.th-nav-item:hover .th-nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.th-nav-dropdown-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-size: var(--th-text-sm);
+  color: var(--th-text-primary);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.th-nav-dropdown-link:hover {
+  background: var(--th-bg-secondary);
+  color: var(--th-navy-600);
+}
+
+/* ============================================
+   6. FOOTER
+   ============================================ */
+
+.th-footer {
+  background-color: var(--th-navy-800);
+  color: var(--th-text-inverse);
+  padding: 3rem 0 1.5rem;
+}
+
+.th-footer-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.th-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .th-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .th-footer-grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+}
+
+.th-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.th-footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.th-footer-logo-img {
+  width: 3rem;
+  height: 3.5rem;
+}
+
+.th-footer-logo-text {
+  font-family: var(--font-thai-heading);
+  font-size: var(--th-text-lg);
+  font-weight: 600;
+  color: var(--th-text-inverse);
+}
+
+.th-footer-description {
+  font-size: var(--th-text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: var(--th-leading-relaxed);
+  max-width: 300px;
+}
+
+.th-footer-section h4 {
+  font-family: var(--font-thai-heading);
+  font-size: var(--th-text-base);
+  font-weight: 600;
+  color: var(--th-text-inverse);
+  margin-bottom: 1rem;
+}
+
+.th-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.th-footer-link {
+  font-size: var(--th-text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.th-footer-link:hover {
+  color: var(--th-orange-400);
+}
+
+.th-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .th-footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.th-footer-copyright {
+  font-size: var(--th-text-sm);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.th-footer-legal-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.th-footer-legal-link {
+  font-size: var(--th-text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.th-footer-legal-link:hover {
+  color: var(--th-text-inverse);
+}
+
+/* ============================================
+   7. BUTTONS (THAI THEME)
+   ============================================ */
+
+.th-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-base);
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.th-btn-primary {
+  background-color: var(--th-orange-500);
+  color: var(--th-text-inverse);
+}
+
+.th-btn-primary:hover {
+  background-color: var(--th-orange-600);
+}
+
+.th-btn-secondary {
+  background-color: var(--th-navy-600);
+  color: var(--th-text-inverse);
+}
+
+.th-btn-secondary:hover {
+  background-color: var(--th-navy-700);
+}
+
+.th-btn-outline {
+  background-color: transparent;
+  color: var(--th-navy-600);
+  border: 2px solid var(--th-navy-600);
+}
+
+.th-btn-outline:hover {
+  background-color: var(--th-navy-600);
+  color: var(--th-text-inverse);
+}
+
+.th-btn-ghost {
+  background-color: transparent;
+  color: var(--th-text-secondary);
+}
+
+.th-btn-ghost:hover {
+  background-color: var(--th-bg-secondary);
+  color: var(--th-text-primary);
+}
+
+.th-btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: var(--th-text-sm);
+}
+
+.th-btn-lg {
+  padding: 0.875rem 1.75rem;
+  font-size: var(--th-text-lg);
+}
+
+/* ============================================
+   8. BADGES & TAGS
+   ============================================ */
+
+.th-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-xs);
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+.th-badge-primary {
+  background-color: var(--th-navy-100);
+  color: var(--th-navy-700);
+}
+
+.th-badge-accent {
+  background-color: var(--th-orange-100);
+  color: var(--th-orange-700);
+}
+
+.th-badge-gold {
+  background-color: var(--th-gold-100);
+  color: var(--th-gold-700);
+}
+
+.th-badge-success {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.th-badge-active {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.th-badge-inactive {
+  background-color: var(--th-bg-tertiary);
+  color: var(--th-text-muted);
+}
+
+/* ============================================
+   9. CARDS (THAI THEME)
+   ============================================ */
+
+.th-card {
+  background-color: var(--th-bg-primary);
+  border: 1px solid var(--th-border-light);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.th-card:hover {
+  border-color: var(--th-border-default);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.th-card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--th-border-light);
+}
+
+.th-card-body {
+  padding: 1.25rem;
+}
+
+.th-card-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--th-border-light);
+  background-color: var(--th-bg-secondary);
+}
+
+/* Agency Card */
+.th-agency-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: var(--th-bg-primary);
+  border: 1px solid var(--th-border-light);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.th-agency-card:hover {
+  border-color: var(--th-navy-300);
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.1);
+}
+
+.th-agency-logo {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.th-agency-name {
+  font-family: var(--font-thai-heading);
+  font-size: var(--th-text-base);
+  font-weight: 600;
+  color: var(--th-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.th-agency-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: var(--th-text-xs);
+  color: var(--th-text-secondary);
+}
+
+/* ============================================
+   10. ACCESSIBILITY FEATURES
+   ============================================ */
+
+.th-a11y-menu {
+  position: relative;
+}
+
+.th-a11y-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  min-width: 200px;
+  background: var(--th-bg-primary);
+  border: 1px solid var(--th-border-default);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  z-index: 100;
+}
+
+.th-a11y-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  font-size: var(--th-text-sm);
+  color: var(--th-text-primary);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.th-a11y-option:hover {
+  background: var(--th-bg-secondary);
+}
+
+.th-font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.th-font-size-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--th-border-default);
+  border-radius: 0.25rem;
+  background: var(--th-bg-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.th-font-size-btn:hover {
+  background: var(--th-bg-secondary);
+  border-color: var(--th-navy-300);
+}
+
+/* ============================================
+   11. RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Hide on mobile */
+@media (max-width: 767px) {
+  .th-hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .th-hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Mobile navigation */
+.th-mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.th-mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.th-mobile-menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  max-width: 320px;
+  background: var(--th-bg-primary);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.th-mobile-menu.open .th-mobile-menu-panel {
+  transform: translateX(0);
+}
+
+.th-mobile-nav-list {
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+}
+
+.th-mobile-nav-link {
+  display: block;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-base);
+  color: var(--th-text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--th-border-light);
+}
+
+.th-mobile-nav-link:hover {
+  background: var(--th-bg-secondary);
+}
+
+/* ============================================
+   11. HERO SECTION
+   ============================================ */
+
+.th-hero {
+  background: linear-gradient(135deg, var(--th-navy-600) 0%, var(--th-navy-700) 100%);
+  padding: 4rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.th-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.th-hero-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.th-hero-title {
+  font-family: var(--font-thai-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--th-text-inverse);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.th-hero-highlight {
+  color: var(--th-orange-500);
+}
+
+.th-hero-subtitle {
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-lg);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: var(--th-leading-normal);
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+/* ============================================
+   12. SEARCH BOX
+   ============================================ */
+
+.th-search-box {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.th-search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--th-bg-primary);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.th-search-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.75rem;
+  color: var(--th-text-muted);
+  flex-shrink: 0;
+}
+
+.th-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.75rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-base);
+  background: transparent;
+  color: var(--th-text-primary);
+}
+
+.th-search-input::placeholder {
+  color: var(--th-text-muted);
+}
+
+/* ============================================
+   13. STATS SECTION
+   ============================================ */
+
+.th-stats-section {
+  background: var(--th-bg-secondary);
+  padding: 2rem 1rem;
+}
+
+.th-stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .th-stats-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.th-stat-card {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--th-bg-primary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.th-stat-value {
+  font-family: var(--font-thai-heading);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--th-navy-600);
+  line-height: 1.2;
+}
+
+.th-stat-label {
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-sm);
+  color: var(--th-text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* ============================================
+   14. CATEGORY CARDS
+   ============================================ */
+
+.th-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: var(--th-bg-primary);
+  border: 1px solid var(--th-border-light);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.th-category-card:hover {
+  border-color: var(--th-orange-500);
+  box-shadow: 0 4px 12px rgba(242, 101, 34, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   15. DATASET CARDS
+   ============================================ */
+
+.th-dataset-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem;
+  background: var(--th-bg-primary);
+  border: 1px solid var(--th-border-light);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.th-dataset-card:hover {
+  border-color: var(--th-navy-300);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   16. FORMAT BADGES
+   ============================================ */
+
+.th-format-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-family: var(--font-thai-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  letter-spacing: 0.025em;
+}
+
+.th-format-csv {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.th-format-json {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.th-format-xlsx,
+.th-format-xls {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.th-format-pdf {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.th-format-xml {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+/* ============================================
+   17. TRUST BADGES
+   ============================================ */
+
+.th-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
+  font-family: var(--font-thai-body);
+  font-size: var(--th-text-sm);
+  color: var(--th-text-inverse);
+}
+
+/* ============================================
+   18. LOADING STATE
+   ============================================ */
+
+.th-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--th-bg-secondary);
+}
+
+.th-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--th-navy-200);
+  border-top-color: var(--th-orange-500);
+  border-radius: 50%;
+  animation: th-spin 1s linear infinite;
+}
+
+@keyframes th-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   19. MAIN CONTENT AREA
+   ============================================ */
+
+.th-main {
+  min-height: calc(100vh - 200px);
+  background: var(--th-bg-primary);
+}

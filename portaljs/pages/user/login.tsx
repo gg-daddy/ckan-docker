@@ -1,7 +1,7 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Layout from '@/components/Layout';
+import { ThaiGovLayout } from '@/components/thailand';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
@@ -45,16 +45,16 @@ export default function LoginPage() {
   // Show loading state while checking auth
   if (isLoading) {
     return (
-      <Layout title="Login" hideHeaderSearch>
+      <ThaiGovLayout title="Login">
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-th-orange-500"></div>
         </div>
-      </Layout>
+      </ThaiGovLayout>
     );
   }
 
   return (
-    <Layout title="Login" hideHeaderSearch>
+    <ThaiGovLayout title="Login">
       <div className="min-h-[60vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md">
           {/* Header */}
@@ -225,13 +225,13 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-600 hover:text-th-navy-600 transition-colors"
             >
               &larr; Back to Home
             </Link>
           </div>
         </div>
       </div>
-    </Layout>
+    </ThaiGovLayout>
   );
 }

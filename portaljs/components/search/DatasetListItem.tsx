@@ -3,9 +3,17 @@ import { CkanDataset, formatResourceFormat, getFormatBadgeClass } from '@/lib/ck
 
 interface DatasetListItemProps {
   dataset: CkanDataset;
+  isSelected?: boolean;
+  onSelect?: (dataset: CkanDataset) => void;
+  compact?: boolean;
 }
 
-export default function DatasetListItem({ dataset }: DatasetListItemProps) {
+export default function DatasetListItem({
+  dataset,
+  isSelected = false,
+  onSelect,
+  compact = false,
+}: DatasetListItemProps) {
   // Get unique resource formats
   const formats = [...new Set(dataset.resources?.map(r => r.format?.toUpperCase()).filter(Boolean) || [])];
 
@@ -23,24 +31,49 @@ export default function DatasetListItem({ dataset }: DatasetListItemProps) {
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (onSelect) {
+      e.preventDefault();
+      onSelect(dataset);
+    }
+  };
+
+  // Dynamic classes based on compact mode and selection state
+  const articleClasses = [
+    'dataset-list-item',
+    'transition-all duration-150',
+    compact ? 'p-3' : '',
+    isSelected ? 'border-l-4 border-th-orange-500 bg-th-orange-50 dark:bg-th-orange-900/20' : '',
+    onSelect ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800' : '',
+  ].filter(Boolean).join(' ');
+
+  const TitleWrapper = onSelect ? 'button' : Link;
+  const titleProps = onSelect
+    ? { type: 'button' as const, onClick: handleClick, className: 'text-left w-full' }
+    : { href: `/dataset/${dataset.name}` };
+
   return (
-    <article className="dataset-list-item">
-      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+    <article className={articleClasses} onClick={onSelect ? handleClick : undefined}>
+      <div className={`flex flex-col sm:flex-row sm:items-start ${compact ? 'gap-2' : 'gap-3'}`}>
         <div className="flex-1 min-w-0">
           {/* Title */}
-          <Link href={`/dataset/${dataset.name}`}>
+          {onSelect ? (
             <h3 className="dataset-title">{dataset.title}</h3>
-          </Link>
+          ) : (
+            <Link href={`/dataset/${dataset.name}`}>
+              <h3 className="dataset-title">{dataset.title}</h3>
+            </Link>
+          )}
 
-          {/* Description */}
+          {/* Description - hide or truncate more in compact mode */}
           {dataset.notes && (
-            <p className="dataset-description mt-1">
+            <p className={`dataset-description mt-1 ${compact ? 'line-clamp-2' : ''}`}>
               {dataset.notes.replace(/<[^>]*>/g, '')}
             </p>
           )}
 
           {/* Meta information */}
-          <div className="dataset-meta mt-3">
+          <div className={`dataset-meta ${compact ? 'mt-2' : 'mt-3'}`}>
             {/* Organization */}
             {dataset.organization && (
               <div className="dataset-meta-item">
@@ -59,20 +92,22 @@ export default function DatasetListItem({ dataset }: DatasetListItemProps) {
               <span>Updated {formatDate(dataset.metadata_modified)}</span>
             </div>
 
-            {/* Resource count */}
-            <div className="dataset-meta-item">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <span>{dataset.resources?.length || 0} resources</span>
-            </div>
+            {/* Resource count - show in non-compact mode only */}
+            {!compact && (
+              <div className="dataset-meta-item">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>{dataset.resources?.length || 0} resources</span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Format badges */}
         {formats.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 sm:flex-col sm:items-end">
-            {formats.slice(0, 3).map((format) => (
+          <div className={`flex flex-wrap gap-1.5 sm:flex-col sm:items-end ${compact ? 'hidden sm:flex' : ''}`}>
+            {formats.slice(0, compact ? 2 : 3).map((format) => (
               <span
                 key={format}
                 className={getFormatBadgeClass(format)}
@@ -80,23 +115,24 @@ export default function DatasetListItem({ dataset }: DatasetListItemProps) {
                 {formatResourceFormat(format)}
               </span>
             ))}
-            {formats.length > 3 && (
+            {formats.length > (compact ? 2 : 3) && (
               <span className="format-default">
-                +{formats.length - 3}
+                +{formats.length - (compact ? 2 : 3)}
               </span>
             )}
           </div>
         )}
       </div>
 
-      {/* Tags */}
-      {dataset.tags && dataset.tags.length > 0 && (
+      {/* Tags - hide in compact mode */}
+      {!compact && dataset.tags && dataset.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2">
           {dataset.tags.slice(0, 5).map((tag) => (
             <Link
               key={tag.id}
               href={`/search?tags=${encodeURIComponent(tag.name)}`}
               className="badge-gray hover:bg-gray-200 dark:hover:bg-gray-600"
+              onClick={(e) => e.stopPropagation()}
             >
               {tag.display_name}
             </Link>

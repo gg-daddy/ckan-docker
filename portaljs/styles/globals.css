@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Font imports - includes Thai fonts for Thailand government portal */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap');
+
+/* Thailand Government Theme - import for Thai portal mode */
+@import './thailand-gov-theme.css';
 
 @tailwind base;
 @tailwind components;
@@ -481,6 +485,19 @@ body {
     display: flex !important;
   }
 
+  /* User menu and auth buttons */
+  header .hidden.md\:block {
+    display: block !important;
+  }
+
+  header .hidden.md\:flex {
+    display: flex !important;
+  }
+
+  header a.hidden.md\:flex {
+    display: flex !important;
+  }
+
   header .md\:hidden {
     display: none !important;
   }
@@ -490,6 +507,10 @@ body {
 @media (min-width: 1024px) {
   .hidden.lg\:flex {
     display: flex !important;
+  }
+
+  .hidden.lg\:block {
+    display: block !important;
   }
 
   .lg\:hidden {

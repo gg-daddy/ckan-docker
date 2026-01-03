@@ -1,7 +1,7 @@
 import { useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/AuthContext';
-import Layout from './Layout';
+import { ThaiGovLayout } from './thailand';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -77,11 +77,11 @@ export default function ProtectedRoute({
     }
 
     return (
-      <Layout title={loadingTitle} hideHeaderSearch>
+      <ThaiGovLayout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-th-orange-500"></div>
         </div>
-      </Layout>
+      </ThaiGovLayout>
     );
   }
 

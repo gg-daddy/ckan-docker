@@ -571,6 +571,40 @@ export async function getRecentDatasets(limit: number = 6): Promise<CkanDataset[
 }
 
 /**
+ * Fetch a single dataset by ID or name (client-side)
+ * This version is optimized for client-side use without Next.js cache headers
+ */
+export async function fetchDatasetClient(nameOrId: string): Promise<CkanDataset | null> {
+  try {
+    const baseUrl = getCkanApiUrl();
+    const res = await fetch(`${baseUrl}/api/3/action/package_show?id=${encodeURIComponent(nameOrId)}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store', // Always fetch fresh data on client
+    });
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        return null;
+      }
+      throw new Error(`Failed to fetch dataset: ${res.statusText}`);
+    }
+
+    const data: CkanApiResponse<CkanDataset> = await res.json();
+
+    if (data.success) {
+      return data.result;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching dataset (client):', error);
+    return null;
+  }
+}
+
+/**
  * Format a resource format string for display
  */
 export function formatResourceFormat(format: string): string {

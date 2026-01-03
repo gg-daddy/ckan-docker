@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="bg7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E3A5F"/>
+      <stop offset="100%" style="stop-color:#2D4A6F"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="url(#bg7)" stroke="#F26522" stroke-width="3"/>
+  <g fill="#FFFFFF">
+    <!-- Book with checkmark -->
+    <path d="M30 35h25v55H30z" fill="#FFFFFF"/>
+    <path d="M55 35h25c5 0 10 5 10 10v35c0 5-5 10-10 10H55z" fill="#FFFFFF"/>
+    <rect x="35" y="45" width="15" height="3" fill="#1E3A5F"/>
+    <rect x="35" y="52" width="15" height="3" fill="#1E3A5F"/>
+    <rect x="35" y="59" width="15" height="3" fill="#1E3A5F"/>
+    <!-- Checkmark badge -->
+    <circle cx="80" cy="45" r="15" fill="#F26522"/>
+    <polyline points="72,45 78,51 90,39" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

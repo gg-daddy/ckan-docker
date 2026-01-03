@@ -154,7 +154,7 @@ export default function FacetSidebar({
           />
 
           <FacetSection
-            title="Organizations"
+            title="Agencies"
             items={orgItems}
             selectedItems={selectedOrganizations}
             onToggle={onOrganizationToggle}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Layout from '@/components/Layout';
+import { ThaiGovLayout } from '@/components/thailand';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -59,7 +59,7 @@ function ProfileContent() {
   if (!user) return null;
 
   return (
-    <Layout title="Profile" hideHeaderSearch>
+    <ThaiGovLayout title="Profile">
       <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Profile Header */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
@@ -361,12 +361,12 @@ function ProfileContent() {
         <div className="mt-6 text-center">
           <Link
             href="/"
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="text-gray-600 hover:text-th-navy-600 transition-colors"
           >
             &larr; Back to Home
           </Link>
         </div>
       </div>
-    </Layout>
+    </ThaiGovLayout>
   );
 }
